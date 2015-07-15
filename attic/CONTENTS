@@ -1,0 +1,9 @@
+- Attic directory contains the last exclusion, background-only, and discovery fit
+  LimitScripts/ directories from the 2L Super-Razor analysis
+    > "Last" as of July 15 2015
+    >> exclusion == T0_HistFitter-00-00-29
+    >> background-only == T1_HistFitter-00-00-29
+    >> discovery == T2_HistFitter-00-00-29
+
+daniel.joseph.antrim@cern.ch
+July 15 2015
