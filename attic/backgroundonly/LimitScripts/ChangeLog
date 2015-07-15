@@ -1,0 +1,59 @@
+2013-08-26 Matt
+	* Fixed error in the setting of regions for where to fit.
+	* Modified the runBatch script
+	
+2013-08-19 Matt
+	* Added fakes as separate tree.  
+
+2013-08-16 Matt
+	* Modified batch script to handle latest running options
+	* Updated README
+	* Tagging -00-00-05
+	* Fixed bug when trying to run ModeC, would crash because claimed no grid, but just issue with if vs. elif
+	* Updated runBatchLimit.sh to easily toggle the options between grids.  Now default is sparse grid
+	* Added sparse slepton grid
+
+2013-08-02 Matt
+	* Modified batch script
+	* Added more command line options
+	* Added possibility of running slepton limits for RH+LH, RH, and LH
+	* Tagging 00-00-04
+
+2013-08-02 Matt
+	* Adding batch scripts to run
+	* Added more grid options to take into account splitting up the points for batch submission -- faster for running
+	* Modified fitting for mT2 regions to only fit for mT2 > 90 for ZV regardless of mT2 value
+	* Unblinding signal region as default
+	
+2013-08-02 Serhan Mete <amete@cern.ch>
+	* M      dumpTables.sh: Switch to MINOS errors, add corrMatrix to outputs
+	* M      SelectionConfig.py: Organize a bit, use ee+mm for ZVCR-mT2
+	* M      SetSimultaneousFitOptions.py: Added emZVCR-mT2 definitions, genertic
+	* M      LimitConfig.py: Tweaked the sim. fit part a bit. We need normalization regions only if we fit
+				 otherwise don't define. Fit ZV only in ee+mm and not separately. Should also switch
+				 to fitting only in CRZV-mT2,90 for all mT2 based SRs.
+				 Add theory uncertainties only in the SR. Otherwise, you profile (I don't think this is correct)
+				 but more importantly you introduce possible anti-correlation between the scale factor and 
+				 theory uncertainties, shrinking the error.
+
+2013-08-01 Matt
+	* Added systematic command line option
+	* Modified dumpTable.sh to work with new option
+	* Fixed error when running signal samples with systematics.  Wasn't setting file properly.
+	* Tagging 00-00-03
+	
+2013-07-31 Matt
+	* Adding setupDir.sh which will get the necessary packages and setup the structure in the right way
+	* Added three options for running limits, script will not execute unless SR Channel Grid are specified
+	* Added a runLimit.sh script as an example of how to use
+	* Updated README
+	* Tagging LimitScripts-00-00-02
+	
+2013-07-25 Matt
+	* Committing scripts.  Not working yet, but getting there
+	* Working version committed
+	* Option 4 is ee and mm, updating in scripts
+	* Tagging scripts LimitScripts-00-00-01
+	
+2013-07-24 Matt
+	* Creating directory structure to clean up limit inputs

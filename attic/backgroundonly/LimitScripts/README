@@ -1,0 +1,125 @@
+
+#################################################################
+# This file will contain the instructions on how to use the     #
+# scripts in the package "LimitScripts".  They are based off    #
+# of the implementation from Geraldine and Pascal, and have     #
+# been re-worked to try to make it slightly more user friendly. #
+# Details for each module can be found below.                   #
+#################################################################
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=//
+//                     HOW TO RUN                       //
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=//
+
+This package needs to be placed inside of your HistFitter 
+directory.  If you have checked it out somewhere else,
+please move it into HistFitter directory.  Otherwise it
+will not know where to look for the packages.
+
+Once that has been done, you can execute from the
+HistFitter directory by doing:
+
+HistFitter.py -trwf LimitScripts/LimitConfig.py <SR> <Channel> <Grid> <Sys> <SlepOpt>
+
+<SR>      -- This is the signal region to run over. Right now
+              options are SR1 SR2a SR2b SR4a SR4b SR4c
+<Channel> -- The channel: all ee mm em
+<Grid>    -- SMCwslep and DLiSlep are supported. You may need to add yours once you 
+	     have name. It should be same name as what it is for your HFTs.
+<Sys>     -- These are to include the theory uncertainty on signal.  Options are NoSys, up, down
+<SlepOpt> -- This is if we need to run LH/RH only limits for sleptons. It can be left blank
+	     if the user is not running slepton limits. It will be attached to the output
+  	     file names only in the case of slepton limits.  If no option is given for the
+  	     slepton case, then RH+LH is assumed
+
+This will produce the histograms and the workspace.
+The histograms will be put into the data/ directory
+and the workspace will be saved in results/ directory.
+
+To change the configuration, look in LimitConfig.py
+in order to see the configurable options.  Everything
+is specified at the top of the file.  Some general
+strings are specified, and then one RuntimeOptions(...)
+object is created where all the running options are set.
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=//
+//                       MODULES                        //
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=//
+
+//---------------------------//
+// LimitConifg  
+//---------------------------//
+
+This is what is actually run.  The user specifies the
+options for this particular run at the top of the file
+and then executes using:
+
+HistFitter.py <options> LimitScripts/LimitConfig.py
+
+Other modules are used by this configuration script.
+
+Please note that the user will have to change:
+* indir to be the location of their input HFTs
+* bkgFile to the name of their background trees
+* signalFile to the name of their signal trees
+* Samples (ex zxSample) to have the right name used
+  in their trees. Serhan and Geraldine use different
+  conventions for some of these (eg. higgs vs. Higgs).
+
+//---------------------------//
+// RuntimeOptions
+//---------------------------//
+
+This is a class to house all the options.  The list in 
+there currently is probably not exhaustive, so more
+can be added to make the code more flexible in 
+future iterations.
+
+//---------------------------//
+// ConfigDefs
+//---------------------------//
+
+This is where some generic 'enum' type objects are
+stored (eg. lepton channel) and also where the
+grids will be kept.  This trims down on space
+in the main configuration file.  The user can
+also add more information to this as neccessary
+
+//---------------------------//
+// SystematicObject
+//---------------------------//
+
+This is another class where all of the sytematics are 
+turned on and set.  Then in LimitConfig, the sys
+can be accessed via the sys object. In the case of 
+generator uncertainty, these are done by hand in the
+LimitConfig.py script.  If you need to add a new 
+signal region, you will have to look in TheoryUncertainties.py
+to see if your SR is supported.  If not, add it with the corresponding
+uncertianty.
+
+//---------------------------//
+// SelectionConfig
+//---------------------------//
+
+This is where all of the different selections are set.
+Basicaly the cuts dictionary is manipulated in here,
+so if new selections are needed/added, they can be
+incorporated here.
+
+//---------------------------//
+// SetSimultaneousFitOptions
+//---------------------------//
+
+This is a simple method to set the fit options to be
+used.  It will specifically tell HistFitter what 
+control regions to fit for various backgrounds and
+lepton channels.
+
+//---------------------------//
+// TheoryUncertainties
+//---------------------------//
+
+This contains the current theory uncertainties. The
+appropriate uncertainties are assigned based on the signal 
+region.  They are set by hand in LimitConfig.
