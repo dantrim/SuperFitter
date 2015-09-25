@@ -16,11 +16,11 @@ sys.path.append(os.environ['LIMITDIR'])
 
 
 class SignalGrid :
-    def __init__(self, name = "", dbg_ = False) :
-        self.gridName = name
+    def __init__(self, name_ = "", dbg_ = False) :
+        self.name = name_
         self.verbose = dbg_
 
-        self.sampleList = self.buildSamples(name)
+        self.sampleList = self.buildSamples(name_)
 
     def getSampleList(self) :
         return self.sampleList
