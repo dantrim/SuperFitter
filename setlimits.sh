@@ -1,2 +1,2 @@
-parentdir="$(dirname "$(pwd)")"
+parentdir="$(pwd)"
 export LIMITDIR=$parentdir/LimitScripts

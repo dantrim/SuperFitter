@@ -60,12 +60,13 @@ def buildRegions() :
     # ------------------------------------------------------ #
     #  Test Regions                                          #
     # ------------------------------------------------------ #
-    rc.Add("RFSR", "nLeptons==2 && nElectrons==1 && nMuons==1 && (l_q[0]*l_q[1])<0 && l_pt[0]>20 && l_pt[1]>20 && DPB_vTT_0 > 2. && RPT_0>0.65 && nBJets==0 && mt2>90")
+    rc.Add("RFSR", "nLeptons==2 && nElectrons==1 && nMuons==1 && (l_q[0]*l_q[1])<0 && l_pt[0]>20 && l_pt[1]>20 && DPB > 2. && R2>0.65 && nBJets==0 && mt2>90")
     rc.Add("SR4", "nLeptons==2 && nMuons==1 && nElectrons==1 && mt2>120 && l_pt[0]>35 && l_pt[1]>20 && (l_q[0]*l_q[1])<0")
-    rc.Add("SRz", "nLeptons==2 && nMuons==1 && nElectrons==1 && mDeltaR>120 && l_pt[0]>35 && l_pt[1]>20 && (l_q[0]*l_q[1])<0")
+    rc.Add("SRz", "nLeptons==2 && nMuons==1 && nElectrons==1 && MDR>120 && l_pt[0]>35 && l_pt[1]>20 && (l_q[0]*l_q[1])<0")
 
     # ------------------------------------------------------ #
     #  Test CR                                               #
     # ------------------------------------------------------ #
-    rc.Add("CR", "nLeptons==2 && nElectrons==1 && nMuons==1 && (l_q[0]*l_q[1])<0 && l_pt[0]>20 && l_pt[1]>20 && DPB_vTT_0<2 && DPB_vTT>1.0 && RPT_0>0.65 && nBJets==0 && mt2>90")
+    #rc.Add("CR", "nLeptons==2 && nElectrons==1 && nMuons==1 && (l_q[0]*l_q[1])<0 && l_pt[0]>20 && l_pt[1]>20 && DPB<2 && DPB>1.0 && R2>0.65 && mt2>90")
+    rc.Add("CR", "nLeptons==2")
     return rc

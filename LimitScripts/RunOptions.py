@@ -19,6 +19,8 @@ class RunOptions :
         self.blindSR        = True
         self.blindCR        = True
         self.blindVR        = True
+        self.fitWW          = False ## does not need to be propagated to configMgr
+        self.fitTTbar       = False ## does not need to be propagated to configMgr
         self.doTheorySys    = False
         self.calculator     = 2
         self.teststat       = 3
@@ -31,11 +33,12 @@ class RunOptions :
         self.cutDict        = {}
         self.splitMCsys     = False ## does not need to be propagated to configMgr
         self.weights        = []
+        self.outputSuffix      = ""
 
         self.n  = 0
         self.m = 0
-        self.total_opt_n = 18
-        self.total_opt_m = 17
+        self.total_opt_n = 21
+        self.total_opt_m = 18
 
         self.doCheck = True
 
@@ -80,6 +83,18 @@ class RunOptions :
     def doBlindVR(self) :
         self.m += 1
         return self.blindVR
+
+    def setFitWW(self, doFit = True) :
+        self.fitWW = doFit
+        self.n += 1
+    def doFitWW(self) :
+        return self.fitWW
+
+    def setFitTTbar(self, doFit = True) :
+        self.fitTTbar = doFit
+        self.n += 1
+    def doFitTTbar(self) :
+        return self.fitTTbar
 
     def setTheoryBand(self, doband_ = True) :
         self.doTheorySys = doband_
@@ -166,6 +181,13 @@ class RunOptions :
         self.m += 1
         return self.weights
 
+    def setOutputSuffix(self, suffix_ = "") :
+        self.outputSuffix = suffix_
+        self.n += 1
+    def getOutputSuffix(self) :
+        self.m += 1
+        return self.outputSuffix
+
     def check(self) :
         if self.doCheck :
             self.doCheck = False
@@ -184,4 +206,52 @@ class RunOptions :
             return is_ok
         else :
             return True
+
+    def printCalcType(self, calc_ = -1) :
+        if calc_ < 0 :
+            print "RunOptions printCalcType ERROR    You must provide the calculator type! (e.g. printCalcType(2))"
+        elif calc_ == 0 :
+            return "0 (Frequentist)"
+        elif calc_ == 1 :
+            return "1 (Hybrid)"
+        elif calc_ == 2 :
+            return "2 (Asymptotic)"
+
+    def printTestStatType(self, type_ = -1) :
+        if type_ < 0 :
+            print "RunOptions printTestStatType ERROR    You must provide the test statistic type! (e.g. printTestStatType(1))"
+        elif type_ == 0 :
+            return "0 (LEP)"
+        elif type_ == 1 :
+            return "1 (Tevatron)"
+        elif type_ == 2 :
+            return "2 (Profile likelihood)"
+        elif type_ == 3 :
+            return "3 (One-sided PL)"
+
+    def Print(self) :
+        print " + ---------------------------------------- + "
+        print "    RunOptions "
+        print ""
+        print "      Grid choice           : " , self.grid
+        print "      Signal region         : " , self.signalRegion
+        print "      Exclusion fit         : ", self.doExcl
+        print "      Discovery fit         : ", self.doDisco
+        print "      Background-only fit   : ", self.doBkgOnly
+        print "      Blind SR              : ", self.blindSR
+        print "      Blind CR              : ", self.blindCR
+        print "      Blind VR              : ", self.blindVR
+        print "      Sim. fit TTbar        : ", self.fitTTbar
+        print "      Sim. fit WW           : ", self.fitWW
+        print "      Do theory sys.        : " ,self.doTheorySys
+        print "      Calculator type       : ", self.printCalcType(self.calculator)
+        print "      Test statistic type   : ", self.printTestStatType(self.teststat)
+        print "      Number of scan points : ", self.nScanPoints
+        print "      Input lumi            : " , self.inputLumi
+        print "      Output lumi           : " , self.outputLumi
+        print "      Lumi units            : " , self.lumiUnits
+        print "      Split MC sys          : " , self.splitMCsys
+        print "      Output suffix         : ", self.outputSuffix
+        print ""
+        print " + ---------------------------------------- + "
         
