@@ -63,6 +63,16 @@ bkg_ttbar   = Background("TTbar", filelist_dir + "ttbar_powheg_n0213.txt")
 backgrounds.append(bkg_ttbar)
 bkg_ww      = Background("WW", filelist_dir + "ww_powheg_n0213.txt")
 backgrounds.append(bkg_ww)
+bkg_st      = Background("ST", filelist_dir + "singletop_powheg_n0213.txt")
+backgrounds.append(bkg_st)
+bkg_wjets   = Background("Wjets", filelist_dir + "wjets_sherpa_n0213.txt")
+backgrounds.append(bkg_wjets)
+bkg_zjets   = Background("Zjets", filelist_dir + "zjets_powheg_n0213.txt")
+backgrounds.append(bkg_zjets)
+bkg_wz      = Background("WZ", filelist_dir + "wz_powheg_n0213.txt")
+backgrounds.append(bkg_wz)
+bkg_zz      = Background("ZZ", filelist_dir + "zz_powheg_n0213.txt")
+backgrounds.append(bkg_zz)
 
 ############################
 ## signals
