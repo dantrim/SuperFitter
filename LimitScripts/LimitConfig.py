@@ -5,7 +5,7 @@
 ##                                               ##
 ##          HistFitter configuration             ##
 ##                                               ##
-##           https://xkcd.com/882/               ##
+##           http://bit.ly/1MGZXmq               ##
 ##                                               ##
 ## --------------------------------------------- ##
 ##  daniel antrim                                ##
