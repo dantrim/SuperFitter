@@ -502,8 +502,8 @@ if runOptions.doExclusion() :
         sigSample.setFileList(signal_files)
         sigSample.setNormByTheory()
         sigSample.setStatConfig( not runOptions.doSplitMCsys() )
-      #  if runOptions.doSplitMCsys() :
-      #      sigSample.addSystematic( sysObj.mcstat_SIG )
+        if runOptions.doSplitMCsys() :
+            sigSample.addSystematic( sysObj.mcstat_SIG )
 
         if runOptions.doTheoryBand() : ### TODO check if we need the configMgr setRunOnlyNominalXSec 
             sigXSSyst = Systematic("SigXSec", configMgr.weights, 1.07, 0.93, "user", "overallSys") ### TODO add xsec util to grab the uncertainties on xsec (rather than storing in tree)
