@@ -28,4 +28,6 @@ which will setup the environment variable "LIMITDIR" pointing to the LimitScript
 
 LimitScripts/LimitConfig.py now incorporates user arguments via OptionParser. To avoid HistFitter.py from grabbing these, you must provide the options to LimitConfig.py within the "-u" option of HistFitter.py, e.g.:
 
-`HistFitter.py -twfp -D "allPlots" -u '"-r SR -g bWN --doExcl"' LimitScripts/LimitConfig.py`
+```
+HistFitter.py -twfp -D "allPlots" -u '"-r SR -g bWN --doExcl"' LimitScripts/LimitConfig.py
+```
