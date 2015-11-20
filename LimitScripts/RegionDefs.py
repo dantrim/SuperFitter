@@ -58,15 +58,13 @@ def buildRegions() :
     """
     rc = RegionContainer()
     # ------------------------------------------------------ #
-    #  Test Regions                                          #
+    #  Stop-2L WW-like regions
     # ------------------------------------------------------ #
-    rc.Add("SRold", "nLeptons==2 && nMuons==1 && nElectrons==1 && mt2>40 && l_pt[0]>20 && l_pt[1]>20 && (l_q[0]*l_q[1])<0")
-    rc.Add("SRz", "nLeptons==2 && nMuons==1 && nElectrons==1 && MDR>40 && l_pt[0]>20 && l_pt[1]>20 && (l_q[0]*l_q[1])<0")
-    rc.Add("SR4", "nLeptons==2 && nElectrons==1 && nMuons==1 && (l_q[0]*l_q[1])<0 && l_pt[0]>20 && l_pt[1]>20 && DPB > 2. && R2>0.65 && nBJets==0 && mt2>90")
 
-    # ------------------------------------------------------ #
-    #  Test CR                                               #
-    # ------------------------------------------------------ #
-    #rc.Add("CR", "nLeptons==2 && nElectrons==1 && nMuons==1 && (l_q[0]*l_q[1])<0 && l_pt[0]>20 && l_pt[1]>20 && DPB<2 && DPB>1.0 && R2>0.65 && mt2>90")
-    rc.Add("CR", "nLeptons==2 && nElectrons==1 && nMuons==1 && (l_q[0]*l_q[1])<0 && l_pt[0]>20 && l_pt[1]>20 && DPB > 2. && R2>0.65 && nBJets==0 && mt2>90")
+    rc.Add("SRWW",  "nLeptons==2 && nMuons==1 && nElectrons==1 && (l_q[0]*l_q[1])<0 && nBJets==0 && l_pt[0]>20 && l_pt[1]>20 && RPT>0.65 && DPB_vSS>2.0 && mt2>90")
+    rc.Add("CRT", "nLeptons==2 && nMuons==1 && nElectrons==1 && (l_q[0]*l_q[1])<0 && nBJets>0  && l_pt[0]>20 && l_pt[1]>20 && RPT>0.65 && DPB_vSS<2.0 && mt2>30")
+    rc.Add("CRW", "nLeptons==2 && nMuons==1 && nElectrons==1 && (l_q[0]*l_q[1])<0 && nBJets==0 && l_pt[0]>20 && l_pt[1]>20 && RPT<0.2 && DPB_vSS<2.0 && mt2>20")
+    rc.Add("VRT", "nLeptons==2 && nMuons==1 && nElectrons==1 && (l_q[0]*l_q[1])<0 && nBJets==0 && l_pt[0]>20 && l_pt[1]>20 && RPT>0.65 && DPB_vSS<2.0 && mt2>30")
+    rc.Add("VRW", "nLeptons==2 && nMuons==1 && nElectrons==1 && (l_q[0]*l_q[1])<0 && nBJets==0 && l_pt[0]>20 && l_pt[1]>20 && RPT<0.4 && DPB_vSS>2.0 && mt2>20")
+    
     return rc

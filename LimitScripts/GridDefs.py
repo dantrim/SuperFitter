@@ -41,6 +41,7 @@ class SignalGrid :
             print "Looking for signal grid info in file: %s"%(info_dir + grid_info)
         filename = info_dir + grid_info 
         if os.path.isfile(filename) :
+            print " > File found."
             lines = open(filename).readlines()
             for line in lines :
                 sample_info = ""

@@ -28,6 +28,7 @@ class SystematicObject :
         ## shapeSys  : uncertainty of statistical nature applied to a sum of samples, bin by bin (hence "shape")
         if splitMCSysBySample :
             self.mcstat_TTbar   = Systematic("mcstat_TTbar", "_CENTRAL", "_CENTRAL", "_CENTRAL", "tree", "shapeStat")
+            self.mcstat_VV      = Systematic("mcstat_VV",    "_CENTRAL", "_CENTRAL", "_CENTRAL", "tree", "shapeStat")
             self.mcstat_WW      = Systematic("mcstat_WW",    "_CENTRAL", "_CENTRAL", "_CENTRAL", "tree", "shapeStat")
             self.mcstat_ST      = Systematic("mcstat_ST",    "_CENTRAL", "_CENTRAL", "_CENTRAL", "tree", "shapeStat")
             self.mcstat_Wjets   = Systematic("mcstat_Wjets", "_CENTRAL", "_CENTRAL", "_CENTRAL", "tree", "shapeStat")
