@@ -24,7 +24,7 @@ Before running setup an environment variable that gets used by the scripts insid
 ```
 source ../setlimits
 ```
-which will setup the environment variable pointing to the LimitScripts/ directory in this HistFitter directory. 
+which will setup the environment variable "LIMITDIR" pointing to the LimitScripts/ directory in this HistFitter directory. 
 
 LimitScripts/LimitConfig.py now incorporates user arguments via OptionParser. To avoid HistFitter.py from grabbing these, you must provide the options to LimitConfig.py within the "-u" option of HistFitter.py, e.g.:
 
