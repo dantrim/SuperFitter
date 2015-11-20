@@ -6,7 +6,10 @@ HistFitter has a recommended tag. But I recommend not to use that one. Currently
 
 To setup an area make sure that you have your kerberos ticket (to check out HistFitter from SVN) and do:
 
-`source checkoutHF.sh 00-00-49`
+`source checkoutHF.sh 00-00-49
+    hlleo
+
+`
 `cd HistFitter-00-00-49`
 `source setup_UCIT3.sh`
 `source setup.sh`
