@@ -8,14 +8,12 @@ To setup an area make sure that you have your kerberos ticket (to check out Hist
 
 ```
 source checkoutHF.sh 00-00-49
-    hlleo
-
+cd HistFitter-00-00-49
+source setup_UCIT3.sh
+source setup.sh
+cd src/
+make
 ```
-`cd HistFitter-00-00-49`
-`source setup_UCIT3.sh`
-`source setup.sh`
-`cd src/`
-`make`
 
 ## Example run
 LimitScripts/LimitConfig.py now incorporates user arguments via OptionParser. To avoid HistFitter.py from grabbing these, you must provide the options to LimitConfig.py within the "-u" option of HistFitter.py, e.g.:
