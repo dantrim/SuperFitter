@@ -31,3 +31,6 @@ LimitScripts/LimitConfig.py now incorporates user arguments via OptionParser. To
 ```
 HistFitter.py -twfp -D "allPlots" -u '"-r SR -g bWN --doExcl"' LimitScripts/LimitConfig.py
 ```
+
+## Making Combined Trees for HistFitter Inputs
+There is the script `makeCombinedTrees.py`.
