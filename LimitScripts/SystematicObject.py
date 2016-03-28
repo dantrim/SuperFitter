@@ -36,3 +36,12 @@ class SystematicObject :
             self.mcstat_WZ      = Systematic("mcstat_WZ",    "_CENTRAL", "_CENTRAL", "_CENTRAL", "tree", "shapeStat")
             self.mcstat_ZZ      = Systematic("mcstat_ZZ",    "_CENTRAL", "_CENTRAL", "_CENTRAL", "tree", "shapeStat")
             self.mcstat_SIG     = Systematic("mcstat_SIG",   "_CENTRAL", "_CENTRAL", "_CENTRAL", "tree", "shapeStat")
+
+
+        #######################################################
+        ## e-gamma
+        #######################################################
+        
+        ## EG_RESOLUTION_ALL
+        self.AR_all_EG_RESOLUTION_ALL_MC = Systematic("AR_all_EG_RESOLUTION_ALL_MC", "_CENTRAL", "_EG_RESOLUTION_ALL_DN", "_EG_RESOLUTION_ALL_UP", "tree", "overallSys")
+        self.AR_all_EG_RESOLUTION_ALL_CR = Systematic("AR_all_EG_RESOLUTION_ALL_CR", "_CENTRAL", "_EG_RESOLUTION_ALL_DN", "_EG_RESOLUTION_ALL_UP", "tree", "overallNormSys")

@@ -110,7 +110,8 @@ runOptions.setSignalRegion(options.signalRegion)
 userPrint("Setting whether to do simultaneous fit.")
 
 fitWW = True
-fitTTbar = True
+#ttbar skip
+fitTTbar = False
 userPrint(" > Fit WW    : %s"%fitWW)
 userPrint(" > Fit TTbar : %s"%fitTTbar)
 runOptions.setFitWW(fitWW)
@@ -140,8 +141,8 @@ runOptions.setTheoryBand(doTheoryBand)
 #########################################
 ## configure input and output lumi
 userPrint("Setting the luminosity.")
-lumi_input  = 1.702
-lumi_output = 10.0
+lumi_input  = 3.209
+lumi_output = 3.209
 lumi_units  = "fb-1"
 #userPrint(" --> input  : %s"%str(lumi_input))
 #userPrint(" --> output : %s"%str(lumi_output))
@@ -156,7 +157,7 @@ runOptions.setLumiUnits(lumi_units)
 #########################################
 ## load the samples
 userPrint("Setting up the samples.")
-hft_dir = "/data/uclhc/uci/user/dantrim/SuperFitter/samples/"
+hft_dir = "/data/uclhc/uci/user/dantrim/n0222val/SuperFitter/"
 
 ## data, ttbar, and ww file
 data_file = hft_dir + "HFT_BG_13TeV.root"
@@ -169,7 +170,8 @@ else :
     sys.exit()
 
 ## set the samples
-ttbarSample = Sample("TTbar",   ROOT.TColor.GetColor("#FC0D1B"))
+#ttbar skip
+#ttbarSample = Sample("TTbar",   ROOT.TColor.GetColor("#FC0D1B"))
 vvSample    = Sample("VV",      ROOT.TColor.GetColor("#41C1FC"))
 #wwSample    = Sample("WW",      ROOT.TColor.GetColor("#41C1FC"))
 stSample    = Sample("ST",      ROOT.TColor.GetColor("#DE080C")) 
@@ -180,9 +182,13 @@ zjetsSample = Sample("Zjets",   ROOT.TColor.GetColor("#82DE68"))
 dataSample  = Sample("Data_CENTRAL", kBlack)
 
 ## attach samples to their files
-all_samples = [ ttbarSample, vvSample, stSample, wjetsSample, zjetsSample, dataSample ]
+#ttbar skip
+all_samples = [ vvSample, stSample, wjetsSample, zjetsSample, dataSample ]
+#all_samples = [ ttbarSample, vvSample, stSample, wjetsSample, zjetsSample, dataSample ]
 #all_samples = [ ttbarSample, wwSample, stSample, wjetsSample, zjetsSample, wzSample, zzSample, dataSample ]
-samples     = [ ttbarSample, vvSample, stSample, wjetsSample, zjetsSample, dataSample ]
+#ttbar skip
+samples     = [ vvSample, stSample, wjetsSample, zjetsSample, dataSample ]
+#samples     = [ ttbarSample, vvSample, stSample, wjetsSample, zjetsSample, dataSample ]
 #samples     = [ ttbarSample, wwSample, stSample, wjetsSample, zjetsSample, wzSample, zzSample, dataSample ]
 for s in samples :
     s.setFileList( [mc_file] )
@@ -287,6 +293,16 @@ sysObj = SystematicObject.SystematicObject(configMgr, runOptions.doSplitMCsys())
 ## configure the backgrounds/samples
 userPrint("Configuring the samples.")
 
+
+## helper function to add common MC systematics
+def addSys(sample, doSimFit, sysObject) :
+    if doSimFit :
+        sample.addSystematic(sysObject.AR_all_EG_RESOLUTION_ALL_CR)
+    else :
+        sample.addSystematic(sysObject.AR_all_EG_RESOLUTION_ALL_MC)
+    return sample
+
+
 for sample in all_samples :
     # ----------------------------------------------- #
     #  TTbar                                          #
@@ -297,12 +313,14 @@ for sample in all_samples :
         if runOptions.doSplitMCsys() :
             sample.addSystematic( sysObj.mcstat_TTbar )
 
+        ## add systematics
+        sample = addSys(sample, fitTTbar, sysObj) 
+
         #sample.addSystematic( sysObj.dummySyst )
         if runOptions.doFitTTbar() :
-            if runOptions.getSignalRegion() == "SRWW" :
+            if runOptions.getSignalRegion() == "SRSF" or runOptions.getSignalRegion() == "SRDF" :
                 sample.setNormFactor("mu_TTbar", 1., 0., 10.)
-            if runOptions.getSignalRegion() == "SRWW" :
-                sample.setNormRegions([("CRT", "cuts")])
+                sample.setNormRegions([("CRTop", "cuts")])
         else : 
             sample.setNormByTheory() # i.e. use MC-only for normalization (no fitting, etc...)
     # ----------------------------------------------- #
@@ -314,12 +332,14 @@ for sample in all_samples :
         if runOptions.doSplitMCsys() :
             sample.addSystematic( sysObj.mcstat_VV )
 
+        ## add systematics
+        sample = addSys(sample, fitWW, sysObj)
+
         #sample.addSystematic( sysObj.dummySyst )
         if runOptions.doFitWW() :
-            if runOptions.getSignalRegion() == "SRWW" :
+            if runOptions.getSignalRegion() == "SRSF" or runOptions.getSignalRegion() == "SRDF" :
                 sample.setNormFactor("mu_VV", 1., 0., 10.)
-            if runOptions.getSignalRegion() == "SRWW" :
-                sample.setNormRegions([("CRW", "cuts")])
+                sample.setNormRegions([("CRVV", "cuts")])
         else :
             sample.setNormByTheory()
 
@@ -345,6 +365,9 @@ for sample in all_samples :
         if runOptions.doSplitMCsys() :
             sample.addSystematic( sysObj.mcstat_ST )
 
+        ## add systematics
+        sample = addSys(sample, False, sysObj)
+
         #sample.addSystematic( sysObj.dummySyst )
         sample.setNormByTheory()
 
@@ -357,6 +380,9 @@ for sample in all_samples :
         if runOptions.doSplitMCsys() :
             sample.addSystematic( sysObj.mcstat_Wjets )
 
+        ## add systematics
+        sample = addSys(sample, False, sysObj)
+
         #sample.addSystematic( sysObj.dummySyst )
         sample.setNormByTheory()
         
@@ -368,6 +394,9 @@ for sample in all_samples :
 
         if runOptions.doSplitMCsys() :
             sample.addSystematic( sysObj.mcstat_Zjets )
+
+        ## add systematics
+        sample = addSys(sample, False, sysObj)
 
         #sample.addSystematic( sysObj.dummySyst )
         sample.setNormByTheory()
@@ -529,10 +558,11 @@ if runOptions.doExclusion() :
     configMgr.runOnlyNominalXSec = not runOptions.doTheoryBand()
 
     signals = signalGrid.getSampleList()
+    userPrint(" !! Only running over first signal point !! ")
     for s in signals[:1] :
         #s_ = s.replace(".0", "")
         s_=s
-        #extlx = configMgr.addFitConfigClone(tlx, "Sig_%s"%s_) 
+        extlx = configMgr.addFitConfigClone(tlx, "Sig_%s"%s_) 
 
         userPrint(" > Adding signal sample to exclusion fit config : %s"%s)
    
@@ -547,13 +577,17 @@ if runOptions.doExclusion() :
             sigXSSyst = Systematic("SigXSec", configMgr.weights, 1.07, 0.93, "user", "overallSys") ### TODO add xsec util to grab the uncertainties on xsec (rather than storing in tree)
             sigSample_.addSystematic(sigXSSyst)
 
+        ## add systematics
+
         #sigSample.addSystematic( sysObj.dummySyst )
 
         ## attach the signal strength
         sigSample_.setNormFactor('mu_SIG', 1., 0., 5.)
 
-        tlx.addSamples(sigSample_)
-        tlx.setSignalSample(sigSample_)
+        extlx.addSamples(sigSample_)
+        extlx.setSignalSample(sigSample_)
+        #tlx.addSamples(sigSample_)
+        #tlx.setSignalSample(sigSample_)
         
 
 #####################################################################

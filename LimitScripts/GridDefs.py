@@ -49,11 +49,23 @@ class SignalGrid :
                 if line.startswith('#') : continue
                 line = line.strip()
                 line = line.split()
+
+
+                ###############################################
+                ### 3-body grid
+                ### stop -> bWN
+                ###############################################
                 if 'bWN' in name :
                     sample_info += "bWN_" + "%.1f"%(float(line[1])) + "_" + "%.1f"%(float(line[2]))
                     samples.append(sample_info)
+
         else :
             print 'Signal info for requested grid "%s" not located in expected directory (%s)'%(name, filename)
+            print ' --> Exitting.'
+            sys.exit()
+
+        if len(samples)==0 :
+            print 'No samples found in requested file: %s'%(info_dir + grid_info)
             print ' --> Exitting.'
             sys.exit()
 

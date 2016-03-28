@@ -11,7 +11,7 @@ def userPrint(msg) :
 
 #############################################
 ### signal regions
-def getSRList(fitConfig = None, srType = "", srName = "", nBins = 1., binLow = 0.5, binHigh = 1.0) :
+def getSRList(fitConfig = None, srType = "", srName = "", nBins = 1., binLow = 0.5, binHigh = 1.5) :
     if not fitConfig :
         userPrint("RegionLists getSRList ERROR    fitConfig not provided. Exiting.")
         sys.exit()
@@ -48,11 +48,13 @@ def getCRList(fitConfig = None, srName = "", fitWW = False, fitTTbar = False) :
 
     ### add WW CR
     if fitTTbar :
-        if srName == "SRWW" :
-            cr_list.append(addCR(fitConfig, "CRT", 1, 0, 1))
+        if srName == "SRSF" or srName == "SRDF" :
+            userPrint("RegionLists getCRList    Adding control region 'CRTop' to fit configuration")
+            cr_list.append(addCR(fitConfig, "CRTop", 1, 0, 1))
     if fitWW :
-        if srName == "SRWW" :
-            cr_list.append(addCR(fitConfig, "CRW", 1, 0, 1))
+        if srName == "SRSF" or srName == "SRDF" :
+            userPrint("RegionLists getCRList    Adding control region 'CRVV' to fit configuration")
+            cr_list.append(addCR(fitConfig, "CRVV", 1, 0, 1))
 
     return cr_list
     
@@ -74,8 +76,10 @@ def getVRList(fitConfig = None, srName = "") :
         sys.exit()
     
     vr_list = []
-    if srName == "SRWW" :
-        vr_list.append(addVR(fitConfig, "VRW", 1, 0, 1))
-        vr_list.append(addVR(fitConfig, "VRT", 1, 0, 1))
+    if srName == "SRSF" or srName == "SRDF" :
+        userPrint("RegionLists getVRList    Adding validation region 'VRTop' to fit configuration")
+        vr_list.append(addVR(fitConfig, "VRTop", 1, 0, 1))
+        userPrint("RegionLists getVRList    Adding validation region 'VRVV' to fit configuration")
+        vr_list.append(addVR(fitConfig, "VRVV", 1, 0, 1))
     return vr_list
 

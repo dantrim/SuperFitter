@@ -49,7 +49,8 @@ class Background :
         raw_files = glob.glob(sample_dir + "*.root")
         files = []
         print "Looking for files in %s"%sample_dir
-        for dataset in dsids :
+        for dataset in self.dsid_list :
+        #for dataset in dsids :
             for f in raw_files :
                 if 'entrylist' in f : continue
                 if dataset in f and systematic in f :
@@ -65,21 +66,48 @@ isCondor = True
 
 ###########################
 ## available systematics
-syst = [ 'CENTRAL' ]
+syst = []
+syst.append('CENTRAL')
+
+# egamma
+syst.append('EG_RESOLUTION_ALL_UP')
+syst.append('EG_RESOLUTION_ALL_DN')
+#syst.append('EG_SCALE_ALL_UP')
+#syst.append('EG_SCALE_ALL_DN')
+#
+## muons
+#syst.append('MUONS_ID_DN')
+#syst.append('MUONS_ID_UP')
+#syst.append('MUONS_MS_DN')
+#syst.append('MUONS_MS_UP')
+#syst.append('MUONS_SCALE_DN')
+#syst.append('MUONS_SCALE_UP')
+#
+## jet
+#syst.append('JER')
+#syst.append('JET_GroupedNP_1_DN')
+#syst.append('JET_GroupedNP_1_UP')
+#
+## met
+#syst.append('MET_SoftTrk_ResoPara')
+#syst.append('MET_SoftTrk_ResoPerp')
+#syst.append('MET_SoftTrk_ScaleDown')
+#syst.append('MET_SoftTrk_ScaleUp')
 
 ###########################
 ## backgrounds
 backgrounds = []
-filelist_dir      = "/data/uclhc/uci/user/dantrim/n0216val/filelists/"
-mc_sample_dir     = "/data/uclhc/uci/user/dantrim/ntuples/rjigsaw/mc/Raw/"
-data_sample_dir   = "/data/uclhc/uci/user/dantrim/ntuples/rjigsaw/data/Raw/"
+filelist_dir      = "/data/uclhc/uci/user/dantrim/n0222val/filelists/"
+mc_sample_dir     = "/data/uclhc/uci/user/dantrim/ntuples/n0222/sys/mc/Raw/"
+data_sample_dir   = "/data/uclhc/uci/user/dantrim/ntuples/n0222/nom/data/Raw/"
 
 # data
-bkg_data    = Background("Data", filelist_dir + "data/")
+bkg_data    = Background("Data", filelist_dir + "n0222_data/")
 backgrounds.append(bkg_data)
 # ttbar
-bkg_ttbar   = Background("TTbar", filelist_dir + "ttbar/")
-backgrounds.append(bkg_ttbar)
+print "SKPPING TTBAR"
+#bkg_ttbar   = Background("TTbar", filelist_dir + "ttbar/")
+#backgrounds.append(bkg_ttbar)
 # diboson
 bkg_diboson = Background("VV", filelist_dir + "diboson_sherpa/")
 backgrounds.append(bkg_diboson)
@@ -87,10 +115,10 @@ backgrounds.append(bkg_diboson)
 bkg_st      = Background("ST", filelist_dir + "singletop/")
 backgrounds.append(bkg_st)
 # wjets
-bkg_wjets   = Background("Wjets", filelist_dir + "wjets_powheg/")
+bkg_wjets   = Background("Wjets", filelist_dir + "wjets_sherpa/")
 backgrounds.append(bkg_wjets)
 # zjets
-bkg_zjets   = Background("Zjets", filelist_dir + "zjets_powheg/")
+bkg_zjets   = Background("Zjets", filelist_dir + "zjets_sherpa/")
 backgrounds.append(bkg_zjets)
 
 ############################
@@ -116,13 +144,16 @@ if __name__=="__main__" :
 #        for sys_ in syst :
 #            if "Data" in bkg.name and "CENTRAL" in sys_ : 
 #                bkg.setSample(data_sample_dir, sys_)
+#            elif "Data" in bkg.name and "CENTRAL" not in sys_ : continue
 #            else :
 #                bkg.setSample(mc_sample_dir, sys_)
-#                print bkg.treefiles
+#                print "Loaded %d tree files for sample %s for systematic %s"%(len(bkg.treefiles), bkg.name, sys_)
+#           #     print bkg.treefiles
 #
 #    ## check that for each loaded systeamtic we have the same number
 #    ## of datasets loaded
 #    for bkg in backgrounds :
+#        if "Data" in bkg.name : continue
 #        for sys_ in syst :
 #            if len(bkg.treefiles[sys_]) != len(bkg.dsid_list) :
 #                for ds in bkg.dsid_list :
@@ -140,6 +171,7 @@ if __name__=="__main__" :
 #
 #    for bkg in backgrounds :
 #        for sys_ in syst :
+#            if "Data" in bkg.name and "CENTRAL" not in sys_ : continue
 #            print " + ------------------------------- + "
 #            print "    Combining                        "
 #            print "       (Bkg, Sys) : (%s, %s)         "%(bkg.name, sys_)
@@ -238,16 +270,3 @@ if __name__=="__main__" :
                     merge_chain.AddFile(sample, 0, treename)
                     outfile.cd()
                     merge_chain.Merge(outfile, 0, "fast")
-
-                    
-
-    
-        
-        
-
-
-            
-
-
-    
-    
