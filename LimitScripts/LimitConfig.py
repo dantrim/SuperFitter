@@ -60,6 +60,8 @@ myParser.add_option("--doDisco", action="store_true", dest="doDisco", default=Fa
 myParser.add_option("--doBkgOnly", action="store_true", dest="doBkgOnly", default=False, help="Set background-only fit")
 (options, args) = myParser.parse_args(configMgr.userArg.strip('"').split())
 
+channel_combine = True
+channel_combine_suffix = "_ALL"
 
 
 ### container to hold the configuration
@@ -111,7 +113,7 @@ userPrint("Setting whether to do simultaneous fit.")
 
 fitWW = True
 #ttbar skip
-fitTTbar = False
+fitTTbar =True
 userPrint(" > Fit WW    : %s"%fitWW)
 userPrint(" > Fit TTbar : %s"%fitTTbar)
 runOptions.setFitWW(fitWW)
@@ -171,7 +173,7 @@ else :
 
 ## set the samples
 #ttbar skip
-#ttbarSample = Sample("TTbar",   ROOT.TColor.GetColor("#FC0D1B"))
+ttbarSample = Sample("TTbar",   ROOT.TColor.GetColor("#FC0D1B"))
 vvSample    = Sample("VV",      ROOT.TColor.GetColor("#41C1FC"))
 #wwSample    = Sample("WW",      ROOT.TColor.GetColor("#41C1FC"))
 stSample    = Sample("ST",      ROOT.TColor.GetColor("#DE080C")) 
@@ -183,12 +185,12 @@ dataSample  = Sample("Data_CENTRAL", kBlack)
 
 ## attach samples to their files
 #ttbar skip
-all_samples = [ vvSample, stSample, wjetsSample, zjetsSample, dataSample ]
-#all_samples = [ ttbarSample, vvSample, stSample, wjetsSample, zjetsSample, dataSample ]
+#all_samples = [ vvSample, stSample, wjetsSample, zjetsSample, dataSample ]
+all_samples = [ ttbarSample, vvSample, stSample, wjetsSample, zjetsSample, dataSample ]
 #all_samples = [ ttbarSample, wwSample, stSample, wjetsSample, zjetsSample, wzSample, zzSample, dataSample ]
 #ttbar skip
-samples     = [ vvSample, stSample, wjetsSample, zjetsSample, dataSample ]
-#samples     = [ ttbarSample, vvSample, stSample, wjetsSample, zjetsSample, dataSample ]
+#samples     = [ vvSample, stSample, wjetsSample, zjetsSample, dataSample ]
+samples     = [ ttbarSample, vvSample, stSample, wjetsSample, zjetsSample, dataSample ]
 #samples     = [ ttbarSample, wwSample, stSample, wjetsSample, zjetsSample, wzSample, zzSample, dataSample ]
 for s in samples :
     s.setFileList( [mc_file] )
@@ -241,11 +243,19 @@ configMgr.blindVR = runOptions.doBlindVR()
 configMgr.fixSigXSec = runOptions.doTheoryBand()
 
 configMgr.analysisName   = runOptions.getSignalRegion() + "_" + runOptions.getGrid()
+
+add_suffix = ""
+if channel_combine :
+    add_suffx = channel_combine_suffix
+    configMgr.analysisName = configMgr.analysisName + channel_combine_suffix
+
 suffix = ""
 if runOptions.getOutputSuffix() != "" :
     suffux += "_%s"%runOptions.getOutputSuffx()
-configMgr.histCacheFile  = "data" + suffix + "/" + configMgr.analysisName + ".root"
-configMgr.outputFileName = "results" + suffix + "/" + configMgr.analysisName + "_Output.root"
+
+
+configMgr.histCacheFile  = "data" + suffix + "/" + configMgr.analysisName + add_suffix + ".root"
+configMgr.outputFileName = "results" + suffix + "/" + configMgr.analysisName + add_suffix + "_Output.root"
 
 configMgr.inputLumi  = runOptions.getInputLumi()
 configMgr.outputLumi = runOptions.getOutputLumi()
@@ -297,9 +307,100 @@ userPrint("Configuring the samples.")
 ## helper function to add common MC systematics
 def addSys(sample, doSimFit, sysObject) :
     if doSimFit :
-        sample.addSystematic(sysObject.AR_all_EG_RESOLUTION_ALL_CR)
+
+        #############################################################
+        ## weight systematics
+        #############################################################
+
+        ## e-gamma
+        sample.addSystematic(sysObject.AR_EL_EFF_ID_CR)
+        sample.addSystematic(sysObject.AR_EL_EFF_Iso_CR)
+        sample.addSystematic(sysObject.AR_EL_EFF_Reco_CR)
+
+        ## muons
+        sample.addSystematic(sysObject.AR_MUON_EFF_STAT_CR)
+        sample.addSystematic(sysObject.AR_MUON_EFF_STAT_LOWPT_CR)
+        sample.addSystematic(sysObject.AR_MUON_EFF_SYS_CR)
+        sample.addSystematic(sysObject.AR_MUON_EFF_SYS_LOWPT_CR)
+        sample.addSystematic(sysObject.AR_MUON_ISO_STAT_CR)
+        sample.addSystematic(sysObject.AR_MUON_ISO_SYS_CR)
+
+        ## jets
+        sample.addSystematic(sysObject.AR_JET_JVTEff_CR)
+
+        ## flavor tagging
+        sample.addSystematic(sysObject.AR_FT_EFF_B_CR)
+        sample.addSystematic(sysObject.AR_FT_EFF_C_CR)
+        sample.addSystematic(sysObject.AR_FT_EFF_Light_CR)
+        sample.addSystematic(sysObject.AR_FT_EFF_extrapolation_CR)
+        sample.addSystematic(sysObject.AR_FT_EFF_extrapolation_charm_CR)
+
+        #############################################################
+        ## shape systematics
+        #############################################################
+
+        ## e-gamma
+        sample.addSystematic(sysObject.AR_EG_RESOLUTION_ALL_CR)
+        sample.addSystematic(sysObject.AR_EG_SCALE_ALL_CR)
+        ## muons
+        sample.addSystematic(sysObject.AR_MUONS_ID_CR)
+        sample.addSystematic(sysObject.AR_MUONS_MS_CR)
+        sample.addSystematic(sysObject.AR_MUONS_SCALE_CR)
+        ## jets
+        sample.addSystematic(sysObject.AR_JER_CR)
+        sample.addSystematic(sysObject.AR_JET_GroupedNP_1_CR)
+        ## met
+        sample.addSystematic(sysObject.AR_MET_SoftTrk_ResoPara_CR)
+        sample.addSystematic(sysObject.AR_MET_SoftTrk_ResoPerp_CR)
+        sample.addSystematic(sysObject.AR_MET_SoftTrk_Scale_CR)
     else :
-        sample.addSystematic(sysObject.AR_all_EG_RESOLUTION_ALL_MC)
+
+        #############################################################
+        ## weight systematics
+        #############################################################
+
+        ## e-gamma
+        sample.addSystematic(sysObject.AR_EL_EFF_ID_MC)
+        sample.addSystematic(sysObject.AR_EL_EFF_Iso_MC)
+        sample.addSystematic(sysObject.AR_EL_EFF_Reco_MC)
+
+        ## muons
+        sample.addSystematic(sysObject.AR_MUON_EFF_STAT_MC)
+        sample.addSystematic(sysObject.AR_MUON_EFF_STAT_LOWPT_MC)
+        sample.addSystematic(sysObject.AR_MUON_EFF_SYS_MC)
+        sample.addSystematic(sysObject.AR_MUON_EFF_SYS_LOWPT_MC)
+        sample.addSystematic(sysObject.AR_MUON_ISO_STAT_MC)
+        sample.addSystematic(sysObject.AR_MUON_ISO_SYS_MC)
+
+        ## jets
+        sample.addSystematic(sysObject.AR_JET_JVTEff_MC)
+
+        ## flavor tagging
+        sample.addSystematic(sysObject.AR_FT_EFF_B_MC)
+        sample.addSystematic(sysObject.AR_FT_EFF_C_MC)
+        sample.addSystematic(sysObject.AR_FT_EFF_Light_MC)
+        sample.addSystematic(sysObject.AR_FT_EFF_extrapolation_MC)
+        sample.addSystematic(sysObject.AR_FT_EFF_extrapolation_charm_MC)
+
+        #############################################################
+        ## shape systematics
+        #############################################################
+
+        ## e-gamma
+        sample.addSystematic(sysObject.AR_EG_RESOLUTION_ALL_MC)
+        sample.addSystematic(sysObject.AR_EG_SCALE_ALL_MC)
+        ## muons
+        sample.addSystematic(sysObject.AR_MUONS_ID_MC)
+        sample.addSystematic(sysObject.AR_MUONS_MS_MC)
+        sample.addSystematic(sysObject.AR_MUONS_SCALE_MC)
+        ## jets
+        sample.addSystematic(sysObject.AR_JER_MC)
+        sample.addSystematic(sysObject.AR_JET_GroupedNP_1_MC)
+        ## met
+        sample.addSystematic(sysObject.AR_MET_SoftTrk_ResoPara_MC)
+        sample.addSystematic(sysObject.AR_MET_SoftTrk_ResoPerp_MC)
+        sample.addSystematic(sysObject.AR_MET_SoftTrk_Scale_MC)
+
     return sample
 
 
@@ -352,7 +453,8 @@ for sample in all_samples :
         if runOptions.doSplitMCsys() :
             sample.addSystematic( sysObj.mcstat_WW )
 
-        #sample.addSystematic( sysObj.dummySyst )
+        ## add sys
+        sample = addSys(sample, False, sysObj)
 
         sample.setNormByTheory()
 
@@ -409,7 +511,9 @@ for sample in all_samples :
         if runOptions.doSplitMCsys() :
             sample.addSystematic( sysObj.mcstat_WZ )
 
-        #sample.addSystematic( sysObj.dummySyst )
+        ## add sys
+        sample = addSys(sample, False, sysObj)
+
         sample.setNormByTheory()
 
     # ----------------------------------------------- #
@@ -421,7 +525,9 @@ for sample in all_samples :
         if runOptions.doSplitMCsys() :
             sample.addSystematic( sysObj.mcstat_ZZ )
 
-        #sample.addSystematic( sysObj.dummySyst )
+        ## add sys
+        sample = addSys(sample, False, sysObj)
+
         sample.setNormByTheory()
 
     # ----------------------------------------------- #
@@ -459,7 +565,15 @@ if runOptions.doExclusion() or runOptions.doBackground() : # include background-
 #
 #        return sr_list
 
-    srList = RegionLists.getSRList(tlx, "cuts", runOptions.getSignalRegion(), 1., 0.5, 1.5)
+    srList = []
+    if channel_combine :
+        srList_a = RegionLists.getSRList(tlx, "cuts", "SRDF", 1., 0.5, 1.5)
+        srList_b = RegionLists.getSRList(tlx, "cuts", "SRSF", 1., 0.5, 1.5) 
+        srList.append(srList_a[0])
+        srList.append(srList_b[0])
+    else : 
+        srList = RegionLists.getSRList(tlx, "cuts", runOptions.getSignalRegion(), 1., 0.5, 1.5)
+
     if runOptions.doExclusion() :
         userPrint("Setting signal regions to SignalChannels.")
         tlx.setSignalChannels(srList)
@@ -559,7 +673,7 @@ if runOptions.doExclusion() :
 
     signals = signalGrid.getSampleList()
     userPrint(" !! Only running over first signal point !! ")
-    for s in signals[:1] :
+    for s in signals :
         #s_ = s.replace(".0", "")
         s_=s
         extlx = configMgr.addFitConfigClone(tlx, "Sig_%s"%s_) 
@@ -578,8 +692,7 @@ if runOptions.doExclusion() :
             sigSample_.addSystematic(sigXSSyst)
 
         ## add systematics
-
-        #sigSample.addSystematic( sysObj.dummySyst )
+        sigSample_ = addSys(sigSample_, False, sysObj)
 
         ## attach the signal strength
         sigSample_.setNormFactor('mu_SIG', 1., 0., 5.)

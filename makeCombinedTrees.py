@@ -72,27 +72,27 @@ syst.append('CENTRAL')
 # egamma
 syst.append('EG_RESOLUTION_ALL_UP')
 syst.append('EG_RESOLUTION_ALL_DN')
-#syst.append('EG_SCALE_ALL_UP')
-#syst.append('EG_SCALE_ALL_DN')
-#
-## muons
-#syst.append('MUONS_ID_DN')
-#syst.append('MUONS_ID_UP')
-#syst.append('MUONS_MS_DN')
-#syst.append('MUONS_MS_UP')
-#syst.append('MUONS_SCALE_DN')
-#syst.append('MUONS_SCALE_UP')
-#
-## jet
-#syst.append('JER')
-#syst.append('JET_GroupedNP_1_DN')
-#syst.append('JET_GroupedNP_1_UP')
-#
-## met
-#syst.append('MET_SoftTrk_ResoPara')
-#syst.append('MET_SoftTrk_ResoPerp')
-#syst.append('MET_SoftTrk_ScaleDown')
-#syst.append('MET_SoftTrk_ScaleUp')
+syst.append('EG_SCALE_ALL_UP')
+syst.append('EG_SCALE_ALL_DN')
+
+# muons
+syst.append('MUONS_ID_DN')
+syst.append('MUONS_ID_UP')
+syst.append('MUONS_MS_DN')
+syst.append('MUONS_MS_UP')
+syst.append('MUONS_SCALE_DN')
+syst.append('MUONS_SCALE_UP')
+
+# jet
+syst.append('JER')
+syst.append('JET_GroupedNP_1_DN')
+syst.append('JET_GroupedNP_1_UP')
+
+# met
+syst.append('MET_SoftTrk_ResoPara')
+syst.append('MET_SoftTrk_ResoPerp')
+syst.append('MET_SoftTrk_ScaleDown')
+syst.append('MET_SoftTrk_ScaleUp')
 
 ###########################
 ## backgrounds
@@ -105,9 +105,8 @@ data_sample_dir   = "/data/uclhc/uci/user/dantrim/ntuples/n0222/nom/data/Raw/"
 bkg_data    = Background("Data", filelist_dir + "n0222_data/")
 backgrounds.append(bkg_data)
 # ttbar
-print "SKPPING TTBAR"
-#bkg_ttbar   = Background("TTbar", filelist_dir + "ttbar/")
-#backgrounds.append(bkg_ttbar)
+bkg_ttbar   = Background("TTbar", filelist_dir + "ttbar/")
+backgrounds.append(bkg_ttbar)
 # diboson
 bkg_diboson = Background("VV", filelist_dir + "diboson_sherpa/")
 backgrounds.append(bkg_diboson)
@@ -139,134 +138,134 @@ output_name_sig = "HFT_bWN_13TeV.root"
 
 if __name__=="__main__" :
 
-#    ## load the backgrounds and locate the files
-#    for bkg in backgrounds :
-#        for sys_ in syst :
-#            if "Data" in bkg.name and "CENTRAL" in sys_ : 
-#                bkg.setSample(data_sample_dir, sys_)
-#            elif "Data" in bkg.name and "CENTRAL" not in sys_ : continue
-#            else :
-#                bkg.setSample(mc_sample_dir, sys_)
-#                print "Loaded %d tree files for sample %s for systematic %s"%(len(bkg.treefiles), bkg.name, sys_)
-#           #     print bkg.treefiles
-#
-#    ## check that for each loaded systeamtic we have the same number
-#    ## of datasets loaded
-#    for bkg in backgrounds :
-#        if "Data" in bkg.name : continue
-#        for sys_ in syst :
-#            if len(bkg.treefiles[sys_]) != len(bkg.dsid_list) :
-#                for ds in bkg.dsid_list :
-#                    found_sample = False
-#                    for x in bkg.treefiles[sys_] :
-#                        if ds in x : 
-#                            found_sample = True
-#                    if not found_sample :
-#                        print "############################## ERROR    Systematic (%s) tree not found for dataset %s (%s)"%(sys_, str(ds), bkg.name)
-#
-#    ## get the output file
-#    outfile = r.TFile(output_name, "RECREATE")
-#    outfile.Close()
-#    outfile.Delete()
-#
-#    for bkg in backgrounds :
-#        for sys_ in syst :
-#            if "Data" in bkg.name and "CENTRAL" not in sys_ : continue
-#            print " + ------------------------------- + "
-#            print "    Combining                        "
-#            print "       (Bkg, Sys) : (%s, %s)         "%(bkg.name, sys_)
-#            print ""
-#            merge_chain = r.TChain(bkg.name + "_" + sys_)
-#            #r.TTree.SetMaxtreeSize(137438953472LL)
-#
-#            outfile = r.TFile(output_name, "UPDATE")
-#            outfile.cd()
-#
-#            num_files = 0
-#            sum_entries = 0
-#            sample_list = bkg.treefiles[sys_]
-#            treename = "superNt"
-#            for sample in sample_list :
-#                dsid = ""
-#                for ds in bkg.dsid_list :
-#                    if ds in sample : dsid = str(ds)
-#                in_file = r.TFile(sample)
-#                in_tree = in_file.Get(treename)
-#
-#                if in_tree.GetEntries() > 0 :
-#                    print "%s %s (%s) : "%(bkg.name, dsid, sys_), in_tree.GetEntries()
-#                    sum_entries += in_tree.GetEntries()
-#                    num_files += 1
-#
-#                merge_chain.AddFile(sample, 0,  treename)
-#
-#            print "sum entries : ", sum_entries
-#            print "    Sample summary"
-#            print "         total number of files merged : ", num_files
-#            print "         total number of entries      : ", sum_entries
-#            outfile.cd() 
-#            merge_chain.Merge(outfile, 0, "fast")
-
-    ######################################################
-    ## now merge the signal files
-    for sig in signals :
+    ## load the backgrounds and locate the files
+    for bkg in backgrounds :
         for sys_ in syst :
-            sig.setSample(mc_sample_dir, sys_)
+            if "Data" in bkg.name and "CENTRAL" in sys_ : 
+                bkg.setSample(data_sample_dir, sys_)
+            elif "Data" in bkg.name and "CENTRAL" not in sys_ : continue
+            else :
+                bkg.setSample(mc_sample_dir, sys_)
+                print "Loaded %d tree files for sample %s for systematic %s"%(len(bkg.treefiles), bkg.name, sys_)
+           #     print bkg.treefiles
+
     ## check that for each loaded systeamtic we have the same number
     ## of datasets loaded
-    for sig in signals :
+    for bkg in backgrounds :
+        if "Data" in bkg.name : continue
         for sys_ in syst :
-            if len(sig.treefiles[sys_]) != len(sig.dsid_list) :
-                for ds in sig.dsid_list :
+            if len(bkg.treefiles[sys_]) != len(bkg.dsid_list) :
+                for ds in bkg.dsid_list :
                     found_sample = False
-                    for x in sig.treefiles[sys_] :
+                    for x in bkg.treefiles[sys_] :
                         if ds in x : 
                             found_sample = True
                     if not found_sample :
-                        print "############################## ERROR    Systematic (%s) tree not found for dataset %s (%s)"%(sys, str(ds), sig.name)
+                        print "############################## ERROR    Systematic (%s) tree not found for dataset %s (%s)"%(sys_, str(ds), bkg.name)
 
-    outfile_sig = r.TFile(output_name_sig, "RECREATE")
-    outfile_sig.Close()
-    outfile_sig.Delete()
+    ## get the output file
+    outfile = r.TFile(output_name, "RECREATE")
+    outfile.Close()
+    outfile.Delete()
 
-    for sig in signals :
+    for bkg in backgrounds :
         for sys_ in syst :
+            if "Data" in bkg.name and "CENTRAL" not in sys_ : continue
+            print " + ------------------------------- + "
+            print "    Combining                        "
+            print "       (Bkg, Sys) : (%s, %s)         "%(bkg.name, sys_)
+            print ""
+            merge_chain = r.TChain(bkg.name + "_" + sys_)
+            #r.TTree.SetMaxtreeSize(137438953472LL)
 
+            outfile = r.TFile(output_name, "UPDATE")
+            outfile.cd()
+
+            num_files = 0
+            sum_entries = 0
+            sample_list = bkg.treefiles[sys_]
             treename = "superNt"
+            for sample in sample_list :
+                dsid = ""
+                for ds in bkg.dsid_list :
+                    if ds in sample : dsid = str(ds)
+                in_file = r.TFile(sample)
+                in_tree = in_file.Get(treename)
 
-            filename = "./LimitScripts/susyinfo/grid_" + grid + ".txt" 
-            lines = open(filename).readlines()
-            for line in lines :
-                if not line : continue
-                if line.startswith("#") : continue
-                line = line.strip()
-                line = line.split()
-                for ds in sig.dsid_list :
-                    if line[0] != ds : continue
-                    print line
-                    signame = grid + "_" + "%.1f"%float(line[1]) + "_" + "%.1f"%float(line[2])
-                    chain_name = signame + "_" + sys_
+                if in_tree.GetEntries() > 0 :
+                    print "%s %s (%s) : "%(bkg.name, dsid, sys_), in_tree.GetEntries()
+                    sum_entries += in_tree.GetEntries()
+                    num_files += 1
 
-                    print " + ------------------------------- + "
-                    print "    Combining                        "
-                    print "       (Sig, Sys) : (%s, %s)         "%(signame, sys_)
-                    print ""
+                merge_chain.AddFile(sample, 0,  treename)
 
-                    merge_chain = r.TChain(chain_name)
-                    outfile = r.TFile(output_name_sig, "UPDATE")
-                    outfile.cd()
+            print "sum entries : ", sum_entries
+            print "    Sample summary"
+            print "         total number of files merged : ", num_files
+            print "         total number of entries      : ", sum_entries
+            outfile.cd() 
+            merge_chain.Merge(outfile, 0, "fast")
 
-                    sum_entries = 0
-                    sample = ""
-                    for sample_ in sig.treefiles[sys_] :
-                        if ds not in sample_ : continue
-                        sample = sample_ 
-                    in_file = r.TFile(sample)
-                    in_tree = in_file.Get(treename)
-
-                    if in_tree.GetEntries() > 0 :
-                        print "%s %s (%s) : "%(signame, ds, sys_), in_tree.GetEntries()
-
-                    merge_chain.AddFile(sample, 0, treename)
-                    outfile.cd()
-                    merge_chain.Merge(outfile, 0, "fast")
+#    ######################################################
+#    ## now merge the signal files
+#    for sig in signals :
+#        for sys_ in syst :
+#            sig.setSample(mc_sample_dir, sys_)
+#    ## check that for each loaded systeamtic we have the same number
+#    ## of datasets loaded
+#    for sig in signals :
+#        for sys_ in syst :
+#            if len(sig.treefiles[sys_]) != len(sig.dsid_list) :
+#                for ds in sig.dsid_list :
+#                    found_sample = False
+#                    for x in sig.treefiles[sys_] :
+#                        if ds in x : 
+#                            found_sample = True
+#                    if not found_sample :
+#                        print "############################## ERROR    Systematic (%s) tree not found for dataset %s (%s)"%(sys, str(ds), sig.name)
+#
+#    outfile_sig = r.TFile(output_name_sig, "RECREATE")
+#    outfile_sig.Close()
+#    outfile_sig.Delete()
+#
+#    for sig in signals :
+#        for sys_ in syst :
+#
+#            treename = "superNt"
+#
+#            filename = "./LimitScripts/susyinfo/grid_" + grid + ".txt" 
+#            lines = open(filename).readlines()
+#            for line in lines :
+#                if not line : continue
+#                if line.startswith("#") : continue
+#                line = line.strip()
+#                line = line.split()
+#                for ds in sig.dsid_list :
+#                    if line[0] != ds : continue
+#                    print line
+#                    signame = grid + "_" + "%.1f"%float(line[1]) + "_" + "%.1f"%float(line[2])
+#                    chain_name = signame + "_" + sys_
+#
+#                    print " + ------------------------------- + "
+#                    print "    Combining                        "
+#                    print "       (Sig, Sys) : (%s, %s)         "%(signame, sys_)
+#                    print ""
+#
+#                    merge_chain = r.TChain(chain_name)
+#                    outfile = r.TFile(output_name_sig, "UPDATE")
+#                    outfile.cd()
+#
+#                    sum_entries = 0
+#                    sample = ""
+#                    for sample_ in sig.treefiles[sys_] :
+#                        if ds not in sample_ : continue
+#                        sample = sample_ 
+#                    in_file = r.TFile(sample)
+#                    in_tree = in_file.Get(treename)
+#
+#                    if in_tree.GetEntries() > 0 :
+#                        print "%s %s (%s) : "%(signame, ds, sys_), in_tree.GetEntries()
+#
+#                    merge_chain.AddFile(sample, 0, treename)
+#                    outfile.cd()
+#                    merge_chain.Merge(outfile, 0, "fast")
