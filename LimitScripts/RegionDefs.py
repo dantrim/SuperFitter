@@ -61,26 +61,56 @@ def buildRegions() :
     #  Stop-2L WW-like regions
     # ------------------------------------------------------ #
     isDF = "nLeptons==2 && nMuons==1 && nElectrons==1 && (l_q[0]*l_q[1])<0 && l_pt[0]>20 && l_pt[1]>20"
+    isEE = "nLeptons==2 && nElectrons==2 && (l_q[0]*l_q[1])<0 && l_pt[0]>20 && l_pt[1]>20 && abs(mll-91.2)>10."
+    isMM = "nLeptons==2 && nMuons==2     && (l_q[0]*l_q[1])<0 && l_pt[0]>20 && l_pt[1]>20 && abs(mll-91.2)>10."
     isSF = "nLeptons==2 && (nElectrons==2 || nMuons==2) && (l_q[0]*l_q[1])<0 && l_pt[0]>20 && l_pt[1]>20 && abs(mll-91.2)>10"
-
 
     ###################################
     ##### signal regions
     ###################################
-    sr_def = "nBJets==0 && MDR>95 && RPT>0.5 && gamInvRp1>0.8 && DPB_vSS>(0.8*abs(cosThetaB)+1.8)"
-    rc.Add("SRDF", isDF + " && " + sr_def)
-    rc.Add("SRSF", isSF + " && " + sr_def)
 
-    ###################################
-    ##### Top CR/VR
-    ###################################
-    rc.Add("CRTop", isDF + " && nBJets>0 && MDR>30 && RPT>0.5 && DPB_vSS<(0.8*abs(cosThetaB)+1.8)")
-    rc.Add("VRTop", isDF + " && nSJets>0 && nBJets==0 && MDR>30 && RPT<0.5 && DPB_vSS>(0.8*abs(cosThetaB)+1.8)")
+    ## m_W sr
+    sr_w_def = "nBJets==0 && RPT>0.5 && gamInvRp1>0.5 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && MDR>95"
+    rc.Add("SRw_DF", isDF + " && " + sr_w_def)
+    rc.Add("SRw_EE", isEE + " && " + sr_w_def)
+    rc.Add("SRw_MM", isMM + " && " + sr_w_def)
 
-    ###################################
-    ##### Diboson CR/VR
-    ###################################
-    rc.Add("CRVV", isDF + " && nSJets==0 && nBJets==0 && MDR>30 && RPT<0.5 && DPB_vSS<(0.8*abs(cosThetaB)+1.8) && DPB_vSS>(0.8*abs(cosThetaB)+1)")
-    rc.Add("VRVV", isDF + " && nSJets==0 && nBJets==0 && MDR>30 && RPT<0.5 && DPB_vSS>(0.8*abs(cosThetaB)+1.8)")
+    ## m_T sr
+    sr_t_def = "nBJets>0 && RPT>0.5 && gamInvRp1>0.5 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && MDR>110"
+    rc.Add("SRt_DF", isDF + " && " + sr_t_def)
+    rc.Add("SRt_EE", isEE + " && " + sr_t_def)
+    rc.Add("SRt_MM", isMM + " && " + sr_t_def)
+
+    ######################################
+    ###### Top CR/VR
+    ######################################
+    rc.Add("CRTop", isDF + " && nBJets>0 && MDR>30 && RPT>0.5 && DPB_vSS<(0.85*abs(cosThetaB)+1.8)")
+    rc.Add("VRTop", isDF + " && nBJets==0 && nSJets>0 && MDR>30 && RPT<0.5 && DPB_vSS>(0.85*abs(cosThetaB)+1.8)")
+
+    ######################################
+    #### Diboson CR/VR
+    ######################################
+    rc.Add("CRVV", isDF + " && nBJets==0 && nSJets<3 && MDR>30 && RPT>0.2 && RPT<0.5 && gamInvRp1>0.5 && DPB_vSS<(0.85*abs(cosThetaB)+1.8)")
+    rc.Add("VRVV", isDF + " && nBJets==0 && nSJets==0 && MDR>30 && RPT<0.5 && gamInvRp1>0.5 && DPB_vSS>(0.85*abs(cosThetaB)+1.8)")
+
+
+  #  ###################################
+  #  ##### signal regions
+  #  ###################################
+  #  sr_def = "nBJets==0 && MDR>95 && RPT>0.5 && gamInvRp1>0.8 && DPB_vSS>(0.8*abs(cosThetaB)+1.8)"
+  #  rc.Add("SRDF", isDF + " && " + sr_def)
+  #  rc.Add("SRSF", isSF + " && " + sr_def)
+
+  #  ###################################
+  #  ##### Top CR/VR
+  #  ###################################
+  #  rc.Add("CRTop", isDF + " && nBJets>0 && MDR>30 && RPT>0.5 && DPB_vSS<(0.8*abs(cosThetaB)+1.8)")
+  #  rc.Add("VRTop", isDF + " && nSJets>0 && nBJets==0 && MDR>30 && RPT<0.5 && DPB_vSS>(0.8*abs(cosThetaB)+1.8)")
+
+  #  ###################################
+  #  ##### Diboson CR/VR
+  #  ###################################
+  #  rc.Add("CRVV", isDF + " && nSJets==0 && nBJets==0 && MDR>30 && RPT<0.5 && DPB_vSS<(0.8*abs(cosThetaB)+1.8) && DPB_vSS>(0.8*abs(cosThetaB)+1)")
+  #  rc.Add("VRVV", isDF + " && nSJets==0 && nBJets==0 && MDR>30 && RPT<0.5 && DPB_vSS>(0.8*abs(cosThetaB)+1.8)")
     
     return rc

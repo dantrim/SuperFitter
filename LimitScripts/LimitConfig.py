@@ -419,7 +419,7 @@ for sample in all_samples :
 
         #sample.addSystematic( sysObj.dummySyst )
         if runOptions.doFitTTbar() :
-            if runOptions.getSignalRegion() == "SRSF" or runOptions.getSignalRegion() == "SRDF" :
+            if "SRw" in runOptions.getSignalRegion() or "SRt" in runOptions.getSignalRegion() :
                 sample.setNormFactor("mu_TTbar", 1., 0., 10.)
                 sample.setNormRegions([("CRTop", "cuts")])
         else : 
@@ -438,7 +438,7 @@ for sample in all_samples :
 
         #sample.addSystematic( sysObj.dummySyst )
         if runOptions.doFitWW() :
-            if runOptions.getSignalRegion() == "SRSF" or runOptions.getSignalRegion() == "SRDF" :
+            if "SRw" in runOptions.getSignalRegion() or "SRt" in runOptions.getSignalRegion() :
                 sample.setNormFactor("mu_VV", 1., 0., 10.)
                 sample.setNormRegions([("CRVV", "cuts")])
         else :
@@ -567,10 +567,12 @@ if runOptions.doExclusion() or runOptions.doBackground() : # include background-
 
     srList = []
     if channel_combine :
-        srList_a = RegionLists.getSRList(tlx, "cuts", "SRDF", 1., 0.5, 1.5)
-        srList_b = RegionLists.getSRList(tlx, "cuts", "SRSF", 1., 0.5, 1.5) 
+        srList_a = RegionLists.getSRList(tlx, "cuts", "SRw_DF", 1., 0.5, 1.5)
+        srList_b = RegionLists.getSRList(tlx, "cuts", "SRw_EE", 1., 0.5, 1.5) 
+        srList_c = RegionLists.getSRList(tlx, "cuts", "SRw_MM", 1., 0.5, 1.5) 
         srList.append(srList_a[0])
         srList.append(srList_b[0])
+        srList.append(srList_c[0])
     else : 
         srList = RegionLists.getSRList(tlx, "cuts", runOptions.getSignalRegion(), 1., 0.5, 1.5)
 
