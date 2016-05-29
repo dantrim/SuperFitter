@@ -55,11 +55,22 @@ myParser.add_option("-r", "--signalRegion", dest="signalRegion", default="")
 myParser.add_option("-g", "--sigGrid",   dest="sigGrid", default="")
 myParser.add_option("-t", "--doTheoryBand", action="store_true", dest="doTheoryBand", default=False)
 myParser.add_option("-s", "--outputSuffix", dest="outputSuffix", default="")
+myParser.add_option("-c", "--channel", dest="channel", default="")
 myParser.add_option("--doExcl", action="store_true", dest="doExcl", default=False, help="Set exclusion fit")
 myParser.add_option("--doDisco", action="store_true", dest="doDisco", default=False, help="Set discovery fit")
 myParser.add_option("--doBkgOnly", action="store_true", dest="doBkgOnly", default=False, help="Set background-only fit")
 (options, args) = myParser.parse_args(configMgr.userArg.strip('"').split())
 
+
+#######################################
+## lepton channels for SR to combine
+possible_channels = ["all", "ee", "mm", "df", "sf"]
+if options.channel == "" :
+    userPrint("You must provide a channel. Possible options are \"all\", \"ee\", \"mm\", \"df\", \"sf\"")
+    sys.exit()
+if str(options.channel) not in possible_channels :
+    userPrint("You have provided an unhandled option for the channel: " + str(options.channel))
+    sys.exit()
 channel_combine = True
 channel_combine_suffix = "_ALL"
 
@@ -99,6 +110,25 @@ verbose = True # hardcode this for now to be wicked crazy
 ##########################################
 ## take in the signal region choice
 userPrint("Setting up the signal region.")
+
+
+## lepton channels for SR to combine
+possible_channels = ["all", "ee", "mm", "df", "sf"]
+if options.channel == "" :
+    userPrint("You must provide a channel. Possible options are \"all\", \"ee\", \"mm\", \"df\", \"sf\"")
+    sys.exit()
+if str(options.channel) not in possible_channels :
+    userPrint("You have provided an unhandled option for the channel: " + str(options.channel))
+    sys.exit()
+channel_combine = True
+channel_combine_suffix = "_ALL"
+
+if not checkSignalRegion(str(options.signalRegion), str(options.channel), regContainer.getDict().keys()) :
+    sys.exit()
+
+print "YOU NEED TO FINISH THE CHECKSIGNALREGION FUNCTION FIRST"
+sys.exit()
+
 if str(options.signalRegion) not in regContainer.getDict().keys() :
     userPrint('SuperFitter LimitConfig ERROR    Requested signal region "%s" not supported. Check RegionDefs.buildRegions()!'%options.signalRegion)
     userPrint('SuperFitter LimitConfig ERROR    --> Exiting.')

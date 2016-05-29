@@ -74,12 +74,14 @@ def buildRegions() :
     rc.Add("SRw_DF", isDF + " && " + sr_w_def)
     rc.Add("SRw_EE", isEE + " && " + sr_w_def)
     rc.Add("SRw_MM", isMM + " && " + sr_w_def)
+    rc.Add("SRw_SF", isSF + " && " + sr_w_def)
 
     ## m_T sr
     sr_t_def = "nBJets>0 && RPT>0.5 && gamInvRp1>0.5 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && MDR>110"
     rc.Add("SRt_DF", isDF + " && " + sr_t_def)
     rc.Add("SRt_EE", isEE + " && " + sr_t_def)
     rc.Add("SRt_MM", isMM + " && " + sr_t_def)
+    rc.Add("SRt_SF", isSF + " && " + sr_t_def)
 
     ######################################
     ###### Top CR/VR
