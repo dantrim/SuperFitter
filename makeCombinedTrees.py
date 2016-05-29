@@ -125,8 +125,8 @@ backgrounds.append(bkg_zjets)
 
 ## will parse through ./LimitScripts/susyinfo/
 signals = []
-grid = "bWN"
-sig_bWN = Background("BWN", filelist_dir + "bwn/")
+grid = "bWNnew"
+sig_bWN = Background("BWN", filelist_dir + "bwn_new/")
 signals.append(sig_bWN)
 
 ###################################
