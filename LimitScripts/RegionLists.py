@@ -48,13 +48,15 @@ def getCRList(fitConfig = None, srName = "", fitWW = False, fitTTbar = False) :
 
     ### add WW CR
     if fitTTbar :
-        if "SRw" in srName or "SRt" in srName :
+        if "SRw" in srName or "SRt" in srName or "SRwt" in srName :
             userPrint("RegionLists getCRList    Adding control region 'CRTop' to fit configuration")
             cr_list.append(addCR(fitConfig, "CRTop", 1, 0, 1))
     if fitWW :
-        if "SRw" in srName or "SRt" in srName :
-            userPrint("RegionLists getCRList    Adding control region 'CRVV' to fit configuration")
-            cr_list.append(addCR(fitConfig, "CRVV", 1, 0, 1))
+        if "SRw" in srName or "SRt" in srName or "SRwt" in srName:
+            userPrint("RegionLists getCRList    Adding control region 'CRVVDF' to fit configuration")
+            cr_list.append(addCR(fitConfig, "CRVVDF", 1, 0, 1))
+            userPrint("RegionLists getCRList    Adding control region 'CRVVSF' to fit configuration")
+            cr_list.append(addCR(fitConfig, "CRVVSF", 1, 0, 1))
 
     return cr_list
     
@@ -76,10 +78,12 @@ def getVRList(fitConfig = None, srName = "") :
         sys.exit()
     
     vr_list = []
-    if "SRw" in srName or "SRt" in srName :
+    if "SRw" in srName or "SRt" in srName or "SRwt" in srName :
         userPrint("RegionLists getVRList    Adding validation region 'VRTop' to fit configuration")
         vr_list.append(addVR(fitConfig, "VRTop", 1, 0, 1))
-        userPrint("RegionLists getVRList    Adding validation region 'VRVV' to fit configuration")
-        vr_list.append(addVR(fitConfig, "VRVV", 1, 0, 1))
+        userPrint("RegionLists getVRList    Adding validation region 'VRVVDF' to fit configuration")
+        vr_list.append(addVR(fitConfig, "VRVVDF", 1, 0, 1))
+        userPrint("RegionLists getVRList    Adding validation region 'VRVVSF' to fit configuration")
+        vr_list.append(addVR(fitConfig, "VRVVSF", 1, 0, 1))
     return vr_list
 
