@@ -24,7 +24,7 @@ class Background :
         global isCondor
         self.treefiles[systematic] = []
         if len(self.dsid_list) == 0 :
-            if isCondor :
+            if isCondor and self.name != "Fakes" :
                 print "Looking for samples for process %s in %s"%(self.name, self.filelist)
                 dsids = []
                 txt_files = glob.glob(self.filelist + "*.txt")
@@ -32,8 +32,18 @@ class Background :
                     if "Data" not in self.name :
                         dsids.append(tf[tf.find('mc15_13TeV.')+11 : tf.find('mc15_13TeV.')+17])
                     else :
-                        dsids.append(tf[tf.find('data15_13TeV.00')+15 : tf.find('data15_13TeV.')+21])
+                        if "data15" in tf :
+                            dsids.append(tf[tf.find('data15_13TeV.00')+15 : tf.find('data15_13TeV.')+21])
+                        elif "data16" in tf :
+                            dsids.append(tf[tf.find('data16_13TeV.00')+15 : tf.find('data16_13TeV.')+21])
                 self.dsid_list = dsids
+            elif isCondor and self.name == "Fakes" :
+                print "Looking for samples for process %s in %s"%(self.name, self.filelist)
+                fake_files = glob.glob(self.filelist + "*.root")
+                if len(fake_files) == 0 :
+                    print "WARNING No fake ntuples found in directory: %s"%self.filelist
+                    sys.exit()
+                self.dsid_list.append("3body_v02")
             else :
                 print "Looking for samples for process %s in %s"%(self.name, self.filelist)
                 dsids = []
@@ -89,36 +99,50 @@ syst.append('JET_GroupedNP_1_DN')
 syst.append('JET_GroupedNP_1_UP')
 
 # met
-syst.append('MET_SoftTrk_ResoPara')
-syst.append('MET_SoftTrk_ResoPerp')
-syst.append('MET_SoftTrk_ScaleDown')
-syst.append('MET_SoftTrk_ScaleUp')
+#syst.append('MET_SoftTrk_ResoPara')
+#syst.append('MET_SoftTrk_ResoPerp')
+#syst.append('MET_SoftTrk_ScaleDown')
+#syst.append('MET_SoftTrk_ScaleUp')
 
 ###########################
 ## backgrounds
 backgrounds = []
-filelist_dir      = "/data/uclhc/uci/user/dantrim/n0222val/filelists/"
-mc_sample_dir     = "/data/uclhc/uci/user/dantrim/ntuples/n0222/sys/mc/Raw/"
-data_sample_dir   = "/data/uclhc/uci/user/dantrim/ntuples/n0222/nom/data/Raw/"
+filelist_dir      = "/data/uclhc/uci/user/dantrim/n0225val/filelists/"
+#mc_sample_dir     = "/data/uclhc/uci/user/dantrim/ntuples/n0224/may25/mc/Raw/"
+#mc_sample_dir     = "/data/uclhc/uci/user/dantrim/ntuples/n0224/hftrees/mc/Raw/"
+#mc_sample_dir     = "/data/uclhc/uci/user/dantrim/ntuples/n0225/jul6/mc/Raw/"
+#mc_sample_dir     = "/data/uclhc/uci/user/dantrim/ntuples/n0225/jun30/mc/sf_diboson/Raw/"
+mc_sample_dir = "/data/uclhc/uci/user/dantrim/ntuples/n0225/jul6/mc/sf_diboson/Raw/"
+#data_sample_dir   = "/data/uclhc/uci/user/dantrim/ntuples/n0224/may25/data/Raw/"
+#data_sample_dir   = "/data/uclhc/uci/user/dantrim/ntuples/n0224/hftrees/data15/Raw/"
+#data_sample_dir   = "/data/uclhc/uci/user/dantrim/ntuples/n0225/jun30/data15/Raw/"
+data_sample_dir   = "/data/uclhc/uci/user/dantrim/ntuples/n0225/jul6/n0225_data/Raw/"
+fake_sample_dir   = "/data/uclhc/uci/user/dantrim/ntuples/n0224/fakes_jun13/"
 
 # data
-bkg_data    = Background("Data", filelist_dir + "n0222_data/")
-backgrounds.append(bkg_data)
-# ttbar
-bkg_ttbar   = Background("TTbar", filelist_dir + "ttbar/")
-backgrounds.append(bkg_ttbar)
+#bkg_data    = Background("Data", filelist_dir + "n0225_data_2015DSW/")
+##bkg_data    = Background("Data", filelist_dir + "n0225_data15/")
+#backgrounds.append(bkg_data)
+## ttbar
+#bkg_ttbar   = Background("TTbar", filelist_dir + "ttbar/")
+#backgrounds.append(bkg_ttbar)
 # diboson
-bkg_diboson = Background("VV", filelist_dir + "diboson_sherpa/")
+bkg_diboson = Background("VVSF", filelist_dir + "diboson_sherpa_lvlv/")
 backgrounds.append(bkg_diboson)
-# single top
-bkg_st      = Background("ST", filelist_dir + "singletop/")
-backgrounds.append(bkg_st)
-# wjets
-bkg_wjets   = Background("Wjets", filelist_dir + "wjets_sherpa/")
-backgrounds.append(bkg_wjets)
-# zjets
-bkg_zjets   = Background("Zjets", filelist_dir + "zjets_sherpa/")
-backgrounds.append(bkg_zjets)
+#bkg_dy = Background("DrellYan", filelist_dir + "drellyan_sherpa/")
+#backgrounds.append(bkg_dy)
+## single top
+#bkg_st      = Background("ST", filelist_dir + "singletop/")
+#backgrounds.append(bkg_st)
+## wjets
+#bkg_wjets   = Background("Wjets", filelist_dir + "wjets_sherpa22/")
+#backgrounds.append(bkg_wjets)
+## zjets
+#bkg_zjets   = Background("Zjets", filelist_dir + "zjets_sherpa22/")
+#backgrounds.append(bkg_zjets)
+## fakes
+#bkg_fakes   = Background("Fakes", "/data/uclhc/uci/user/dantrim/ntuples/n0224/fakes_jun13/") 
+#backgrounds.append(bkg_fakes)
 
 ############################
 ## signals
@@ -126,13 +150,13 @@ backgrounds.append(bkg_zjets)
 ## will parse through ./LimitScripts/susyinfo/
 signals = []
 grid = "bWNnew"
-sig_bWN = Background("BWN", filelist_dir + "bwn_new/")
+sig_bWN = Background("BWN", filelist_dir + "bwn/")
 signals.append(sig_bWN)
 
 ###################################
 ## setup the output file name and location
 output_dir  = "./" 
-output_name = "HFT_BG_13TeV.root"
+output_name = "HFT_BG_13TeV_VVSF_Jul7.root"
 output_name_sig = "HFT_bWN_13TeV.root"
 
 
@@ -144,6 +168,9 @@ if __name__=="__main__" :
             if "Data" in bkg.name and "CENTRAL" in sys_ : 
                 bkg.setSample(data_sample_dir, sys_)
             elif "Data" in bkg.name and "CENTRAL" not in sys_ : continue
+            elif "Fakes" in bkg.name and "CENTRAL" in sys_ :
+                bkg.setSample(fake_sample_dir, sys_)
+            elif "Fakes" in bkg.name and "CENTRAL" not in sys_ : continue
             else :
                 bkg.setSample(mc_sample_dir, sys_)
                 print "Loaded %d tree files for sample %s for systematic %s"%(len(bkg.treefiles), bkg.name, sys_)
@@ -153,6 +180,7 @@ if __name__=="__main__" :
     ## of datasets loaded
     for bkg in backgrounds :
         if "Data" in bkg.name : continue
+        if "Fakes" in bkg.name : continue
         for sys_ in syst :
             if len(bkg.treefiles[sys_]) != len(bkg.dsid_list) :
                 for ds in bkg.dsid_list :
@@ -171,11 +199,13 @@ if __name__=="__main__" :
     for bkg in backgrounds :
         for sys_ in syst :
             if "Data" in bkg.name and "CENTRAL" not in sys_ : continue
+            if "Fakes" in bkg.name and "CENTRAL" not in sys_ : continue
             print " + ------------------------------- + "
             print "    Combining                        "
             print "       (Bkg, Sys) : (%s, %s)         "%(bkg.name, sys_)
             print ""
             merge_chain = r.TChain(bkg.name + "_" + sys_)
+
             #r.TTree.SetMaxtreeSize(137438953472LL)
 
             outfile = r.TFile(output_name, "UPDATE")
@@ -222,7 +252,7 @@ if __name__=="__main__" :
 #                        if ds in x : 
 #                            found_sample = True
 #                    if not found_sample :
-#                        print "############################## ERROR    Systematic (%s) tree not found for dataset %s (%s)"%(sys, str(ds), sig.name)
+#                        print "############################## ERROR    Systematic (%s) tree not found for dataset %s (%s)"%(sys_, str(ds), sig.name)
 #
 #    outfile_sig = r.TFile(output_name_sig, "RECREATE")
 #    outfile_sig.Close()
@@ -243,7 +273,7 @@ if __name__=="__main__" :
 #                for ds in sig.dsid_list :
 #                    if line[0] != ds : continue
 #                    print line
-#                    signame = grid + "_" + "%.1f"%float(line[1]) + "_" + "%.1f"%float(line[2])
+#                    signame = grid.replace("new","") + "_" + "%.1f"%float(line[1]) + "_" + "%.1f"%float(line[2])
 #                    chain_name = signame + "_" + sys_
 #
 #                    print " + ------------------------------- + "
