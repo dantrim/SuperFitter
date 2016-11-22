@@ -43,7 +43,7 @@ class Background :
                 if len(fake_files) == 0 :
                     print "WARNING No fake ntuples found in directory: %s"%self.filelist
                     sys.exit()
-                self.dsid_list.append("3body_v02")
+                self.dsid_list.append("FakesInclusive")
             else :
                 print "Looking for samples for process %s in %s"%(self.name, self.filelist)
                 dsids = []
@@ -63,9 +63,16 @@ class Background :
         #for dataset in dsids :
             for f in raw_files :
                 if 'entrylist' in f : continue
-                if dataset in f and systematic in f :
+                if dataset in f and systematic in f and self.name != "Fakes" :
                     files.append(f)
                     break # move to next dsid
+                elif dataset in f and self.name == "Fakes" and systematic == "CENTRAL" :
+                    print "ADDING %s"%f
+                    print "ADDING %s"%f
+                    print "ADDING %s"%f
+                    print "ADDING %s"%f
+                    files.append(f)
+                    break
 
         self.treefiles[systematic] = files 
                      
@@ -107,42 +114,52 @@ syst.append('JET_GroupedNP_1_UP')
 ###########################
 ## backgrounds
 backgrounds = []
-filelist_dir      = "/data/uclhc/uci/user/dantrim/n0225val/filelists/"
+filelist_dir      = "/data/uclhc/uci/user/dantrim/n0226val/filelists/"
 #mc_sample_dir     = "/data/uclhc/uci/user/dantrim/ntuples/n0224/may25/mc/Raw/"
 #mc_sample_dir     = "/data/uclhc/uci/user/dantrim/ntuples/n0224/hftrees/mc/Raw/"
 #mc_sample_dir     = "/data/uclhc/uci/user/dantrim/ntuples/n0225/jul6/mc/Raw/"
 #mc_sample_dir     = "/data/uclhc/uci/user/dantrim/ntuples/n0225/jun30/mc/sf_diboson/Raw/"
-mc_sample_dir = "/data/uclhc/uci/user/dantrim/ntuples/n0225/jul6/mc/sf_diboson/Raw/"
-#data_sample_dir   = "/data/uclhc/uci/user/dantrim/ntuples/n0224/may25/data/Raw/"
-#data_sample_dir   = "/data/uclhc/uci/user/dantrim/ntuples/n0224/hftrees/data15/Raw/"
-#data_sample_dir   = "/data/uclhc/uci/user/dantrim/ntuples/n0225/jun30/data15/Raw/"
-data_sample_dir   = "/data/uclhc/uci/user/dantrim/ntuples/n0225/jul6/n0225_data/Raw/"
-fake_sample_dir   = "/data/uclhc/uci/user/dantrim/ntuples/n0224/fakes_jun13/"
+mc_sample_dir = "/data/uclhc/uci/user/dantrim/ntuples/n0226/jul25/mc/Raw/"
+#mc_sample_dir  = "/data/uclhc/uci/user/dantrim/ntuples/n0226/jul25/mc/diboson_sf/Raw/"
+data_sample_dir   = "/data/uclhc/uci/user/dantrim/ntuples/n0226/jul25/data/Raw/"
+fake_sample_dir   = "/data/uclhc/uci/user/dantrim/SuperFitter/fake_files/"
 
-# data
-#bkg_data    = Background("Data", filelist_dir + "n0225_data_2015DSW/")
-##bkg_data    = Background("Data", filelist_dir + "n0225_data15/")
+## data
+#bkg_data    = Background("Data", filelist_dir + "n0226_dataToRun/")
 #backgrounds.append(bkg_data)
+
 ## ttbar
 #bkg_ttbar   = Background("TTbar", filelist_dir + "ttbar/")
 #backgrounds.append(bkg_ttbar)
-# diboson
-bkg_diboson = Background("VVSF", filelist_dir + "diboson_sherpa_lvlv/")
-backgrounds.append(bkg_diboson)
-#bkg_dy = Background("DrellYan", filelist_dir + "drellyan_sherpa/")
-#backgrounds.append(bkg_dy)
+
 ## single top
 #bkg_st      = Background("ST", filelist_dir + "singletop/")
 #backgrounds.append(bkg_st)
+
 ## wjets
 #bkg_wjets   = Background("Wjets", filelist_dir + "wjets_sherpa22/")
 #backgrounds.append(bkg_wjets)
+
 ## zjets
 #bkg_zjets   = Background("Zjets", filelist_dir + "zjets_sherpa22/")
 #backgrounds.append(bkg_zjets)
+
 ## fakes
 #bkg_fakes   = Background("Fakes", "/data/uclhc/uci/user/dantrim/ntuples/n0224/fakes_jun13/") 
+#bkg_fakes   = Background("Fakes", "/data/uclhc/uci/user/dantrim/SuperFitter/fake_files/")
 #backgrounds.append(bkg_fakes)
+
+#drell yan
+#bkg_dy = Background("DrellYan", filelist_dir + "drellyan_sherpa/")
+#backgrounds.append(bkg_dy)
+
+## diboson
+#bkg_diboson = Background("VVSF", filelist_dir + "diboson_sherpa_lvlv/")
+#backgrounds.append(bkg_diboson)
+
+# ttV
+bkg_ttv = Background("TTV", filelist_dir + "ttV/")
+backgrounds.append(bkg_ttv)
 
 ############################
 ## signals
@@ -156,8 +173,8 @@ signals.append(sig_bWN)
 ###################################
 ## setup the output file name and location
 output_dir  = "./" 
-output_name = "HFT_BG_13TeV_VVSF_Jul7.root"
-output_name_sig = "HFT_bWN_13TeV.root"
+output_name = "HFT_BG_13TeV_TTV_Jul27.root"
+output_name_sig = "HFT_bWN_13TeV_Jul27.root"
 
 
 if __name__=="__main__" :
@@ -235,6 +252,10 @@ if __name__=="__main__" :
             print "         total number of entries      : ", sum_entries
             outfile.cd() 
             merge_chain.Merge(outfile, 0, "fast")
+
+############################################################################################
+############################################################################################
+############################################################################################
 
 #    ######################################################
 #    ## now merge the signal files

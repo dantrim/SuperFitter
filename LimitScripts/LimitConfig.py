@@ -137,7 +137,7 @@ def checkSignalRegion(region_name, region_channel, built_regions) :
             userPrint(x)
             return False
 
-    elif region_channel.lower() != "all" and region_channel.lower() == "sfdf" :
+    elif region_channel.lower() != "all" and region_channel.lower() == "sfdf" and region_name != "SRwt" :
         sf_found = False
         df_found = False
         for built_region in built_regions :
@@ -158,6 +158,37 @@ def checkSignalRegion(region_name, region_channel, built_regions) :
             x = " > %s  %s"%(sf_status, df_status)
             userPrint(x)
             return False
+
+    elif region_channel.lower() != "all" and region_channel.lower() == "sfdf" and region_name == "SRwt" :
+        user_regions = []
+        if region_name == "SRwt" :
+            user_regions += "SRw"
+            user_regions += "SRt"
+        else :
+            user_regions += region_name
+
+        for reg_ in user_regions :
+            sf_found  = False
+            df_found  = False
+            for built_region in built_regions :
+                if reg_ in built_region and "SF" in built_region :
+                    sf_found = True
+                elif reg_ in built_region and "DF" in built_region :
+                    df_found = True
+            all_channels_found = sf_found and df_found
+
+            if not all_channels_found :
+                sf_status = "SF: "
+                df_status = "DF: "
+                if sf_found : sf_status += "YES"
+                else : sf_status += "NO"
+                if df_found : df_status += "YES"
+                else : df_status += "NO"
+                x = "You have requested SF and DF channels for region %s but not all channels have been found."%reg_
+                userPrint(x)
+                x = " > %s  %s  %s"%(sf_status, df_status)
+                userPrint(x)
+                return False
 
     elif region_channel.lower() == "all" :
         user_regions = []
@@ -269,7 +300,7 @@ runOptions.setTheoryBand(doTheoryBand)
 ## configure input and output lumi
 userPrint("Setting the luminosity.")
 lumi_input  = 3.21 
-lumi_output = 5.82 
+lumi_output = 13.3 
 lumi_units  = "fb-1"
 #userPrint(" --> input  : %s"%str(lumi_input))
 #userPrint(" --> output : %s"%str(lumi_output))
@@ -294,7 +325,7 @@ vv_df_file = hft_dir + "HFT_BG_13TeV_VVDF_Jul7.root"
 vv_sf_file = hft_dir + "HFT_BG_13TeV_VVSF_Jul7.root"
 drellyan_file = hft_dir + "HFT_BG_13TeV_DrellYan.root"
 signal_file = ""
-if gridname == "bWN" : signal_file = hft_dir + "HFT_bWN_13TeV_CENTRAL.root"
+if gridname == "bWN" : signal_file = hft_dir + "HFT_bWN_13TeV_Jul12.root"
 else : 
     userPrint('HFT not available for requested grid "%s"'%gridname)
     userPrint(' --> Exitting.')
@@ -342,7 +373,7 @@ userPrint(" --> Sample : %s at %s"%(vvSFSample.name, vv_sf_file))
 
 ##########################################
 ## split MC sys --> need to look this one up again
-runOptions.setSplitMCsys(True)
+runOptions.setSplitMCsys(False)
 
 ##########################################
 ## set the eventweight leaf-name
@@ -440,7 +471,7 @@ else :
 userPrint("Setting up the FitConfig and POI.")
 tlx = configMgr.addFitConfig("BkgOnly")
 #tlx = configMgr.addFitConfig("Bkg_TopLvlXML")
-meas = tlx.addMeasurement(name="NormalMeasurement", lumi = 1., lumiErr = 0.001)
+meas = tlx.addMeasurement(name="NormalMeasurement", lumi = 1., lumiErr = 0.05)
 meas.addPOI("mu_SIG")
 
 tlx.statErrThreshold = 0.001
@@ -837,6 +868,12 @@ if runOptions.doExclusion() or runOptions.doBackground() : # include background-
         for flav in flavors :
             srList_x = RegionLists.getSRList(tlx, "cuts", flav, 1., 0.5, 1.5)
             userPrint("Adding signal region: %s"%flav)
+
+            if "SRw_" in flav or "SRt_" in flav :
+                srList_x[0].getSample("TTbar").addSystematic( sysObj.SRwt_TTbar_THEORY )
+                srList_x[0].getSample("VVDF").addSystematic( sysObj.SRwt_VVDF_THEORY )
+                srList_x[0].getSample("VVSF").addSystematic( sysObj.SRwt_VVSF_THEORY )
+
             srList.append(srList_x[0])
     else : 
         srList = RegionLists.getSRList(tlx, "cuts", runOptions.getSignalRegion(), 1., 0.5, 1.5)
@@ -941,9 +978,16 @@ if runOptions.doExclusion() :
 
     configMgr.runOnlyNominalXSec = not runOptions.doTheoryBand()
 
-    signals = signalGrid.getSampleList()
-    userPrint(" !! Only running over first signal point !! ")
+    signals = signalGrid.getSampleList() # returns list of <Grid>_mX_mY
+    #userPrint(" !! Only running over first signal point !! ")
+    ok_samples = ["250.0_160.0","225.0_135.0","300.0_180.0","300.0_150.0"]
     for s in signals :
+        #use_this = False
+        #for oksampk in ok_samples :
+        #    if oksampk in s : use_this = True
+        #if not use_this : continue
+        #if "225" not in s : continue
+        #if "135" not in s : continue
         #s_ = s.replace(".0", "")
         s_=s
         extlx = configMgr.addFitConfigClone(tlx, "Sig_%s"%s_) 

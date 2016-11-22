@@ -14,7 +14,7 @@ class SystematicObject :
             print "SystematicObject ERROR    Did not provide configMgr to SystematicObject! Exiting."
             sys.exit()
 
-        sigweight = "eventweightNOPUPWNOPUPW"
+        sigweight = "eventweightNOPUPW"
 
         #######################################################
         ## Dummy test

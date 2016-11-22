@@ -36,6 +36,8 @@ class SignalGrid :
         samples = []
 
         info_dir = os.environ['LIMITDIR'] + "/susyinfo/" 
+        if "bWN" in name :
+            name += "new"
         grid_info = "grid_" + name + ".txt"
         if self.verbose :
             print "Looking for signal grid info in file: %s"%(info_dir + grid_info)
