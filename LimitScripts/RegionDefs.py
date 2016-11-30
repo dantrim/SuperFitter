@@ -60,25 +60,31 @@ def buildRegions() :
     # ------------------------------------------------------ #
     #  Stop-2L WW-like regions
     # ------------------------------------------------------ #
-    isDF = "nLeptons==2 && nMuons==1 && nElectrons==1 && (l_q[0]*l_q[1])<0 && l_pt[0]>20 && l_pt[1]>20"
-    isEE = "nLeptons==2 && nElectrons==2 && (l_q[0]*l_q[1])<0 && l_pt[0]>20 && l_pt[1]>20 && abs(mll-91.2)>10."
-    isMM = "nLeptons==2 && nMuons==2     && (l_q[0]*l_q[1])<0 && l_pt[0]>22 && l_pt[1]>20 && abs(mll-91.2)>10."
+    isDF = "nLeptons==2 && nMuons==1 && nElectrons==1 && (l_q[0]*l_q[1])<0 && l_pt[0]>25 && l_pt[1]>20"
+    isEE = "nLeptons==2 && nElectrons==2 && (l_q[0]*l_q[1])<0 && l_pt[0]>25 && l_pt[1]>20 && abs(mll-91.2)>10."
+    isMM = "nLeptons==2 && nMuons==2     && (l_q[0]*l_q[1])<0 && l_pt[0]>25 && l_pt[1]>20 && abs(mll-91.2)>10."
     #isSF = "nLeptons==2 && (nElectrons==2 || nMuons==2) && (l_q[0]*l_q[1])<0 && l_pt[0]>20 && l_pt[1]>20 && abs(mll-91.2)>10"
-    isSF = "(nLeptons==2 && ( (nMuons==2 && l_pt[0]>22 && l_pt[1]>20) || (nElectrons==2 && l_pt[0]>20 && l_pt[1]>20)) && abs(mll-91.2)>10 && (l_q[0]*l_q[1])<0)"
+    isSF = "(nLeptons==2 && ( (nMuons==2 && l_pt[0]>25 && l_pt[1]>20) || (nElectrons==2 && l_pt[0]>25 && l_pt[1]>20)) && abs(mll-91.2)>10 && (l_q[0]*l_q[1])<0)"
+    isDFOS = "nLeptons==2 && nElectrons==1 && nMuons==1 && l_pt[0]>25 && l_pt[1]>20 && (l_q[0]*l_q[1])<0"
+    isSFOS = "(( (nMuons==2 && l_pt[0]>25 && l_pt[1]>20) || (nElectrons==2 && l_pt[0]>25 && l_pt[1]>20)) && abs(mll-91.2)>10 && (l_q[0]*l_q[1])<0)"
+    trigger = "((year==2015 && trig_pass2015==1) || (year==2016 && trig_pass2016update==1))"
 
     ###################################
     ##### signal regions
     ###################################
 
     ## m_W sr
-    sr_w_def = "nBJets==0 && RPT>0.5 && gamInvRp1>0.8 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && MDR>95 && trig_pass2016==1 && mll>20"
+    sr_w_def = "nBJets==0 && RPT>0.65 && gamInvRp1>0.75 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && MDR>95 && mll>20 && " + trigger
+    #sr_w_def = "nBJets==0 && RPT>0.5 && gamInvRp1>0.8 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && MDR>95 && trig_pass2016==1 && mll>20"
+    #sr_w_def = "nBJets==0 && RPT>0.5 && gamInvRp1>0.8 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && MDR>95 && trig_pass2016==1 && mll>20"
     rc.Add("SRw_DF", isDF + " && " + sr_w_def)
     rc.Add("SRw_EE", isEE + " && " + sr_w_def)
     rc.Add("SRw_MM", isMM + " && " + sr_w_def)
     rc.Add("SRw_SF", isSF + " && " + sr_w_def)
 
     ### m_T sr
-    sr_t_def = "nBJets>0 && RPT>0.5 && gamInvRp1>0.8 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && MDR>110 && trig_pass2016==1 && mll>20"
+    sr_t_def = "nBJets>0 && RPT>0.65 && gamInvRp1>0.75 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && MDR>110 && mll>20 && " + trigger
+    #sr_t_def = "nBJets>0 && RPT>0.5 && gamInvRp1>0.8 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && MDR>110 && trig_pass2016==1 && mll>20"
     rc.Add("SRt_DF", isDF + " && " + sr_t_def)
     rc.Add("SRt_EE", isEE + " && " + sr_t_def)
     rc.Add("SRt_MM", isMM + " && " + sr_t_def)
@@ -88,19 +94,31 @@ def buildRegions() :
     ###### Top CR/VR
     ######################################
     #rc.Add("CRTop", isDF + " && nBJets>0 && MDR>30 && RPT>0.5 && DPB_vSS<(0.85*abs(cosThetaB)+1.8)")
-    rc.Add("CRTop", isDF + " && nBJets>0 && MDR>80 && RPT>0.5 && DPB_vSS<(0.85*abs(cosThetaB)+1.8) && trig_pass2016==1 && mll>20")
+    crt_def = isDF + " && nBJets>0 && MDR>80 && RPT>0.65 && DPB_vSS<(0.85*abs(cosThetaB)+1.8) && mll>20 && " + trigger 
+    rc.Add("CRTop", crt_def)
+    #rc.Add("CRTop", isDF + " && nBJets>0 && MDR>80 && RPT>0.65 && DPB_vSS<(0.85*abs(cosThetaB)+1.8) && mll>20 && " + trigger)
     #rc.Add("VRTop", isDF + " && nBJets==0 && nSJets>0 && MDR>30 && RPT<0.5 && DPB_vSS>(0.85*abs(cosThetaB)+1.8)")
-    rc.Add("VRTop", isDF + " && nBJets==0 && MDR>80 && RPT<0.5 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && trig_pass2016==1 && mll>20")
+    vrt_def = isDF + " && nBJets==0 && MDR>80 && RPT<0.65 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && mll>20 && " + trigger 
+    rc.Add("VRTop", vrt_def)
+    #rc.Add("VRTop", isDF + " && nBJets==0 && MDR>80 && RPT<0.5 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && trig_pass2016==1 && mll>20")
 
     ######################################
     #### Diboson CR/VR
     ######################################
     #rc.Add("CRVV", isDF + " && nBJets==0 && nSJets<3 && MDR>30 && RPT>0.2 && RPT<0.5 && gamInvRp1>0.5 && DPB_vSS<(0.85*abs(cosThetaB)+1.8)")
-    rc.Add("CRVVDF", isDF + " && nBJets==0 && MDR>30 && RPT<0.5 && gamInvRp1>0.8 && DPB_vSS<(0.85*abs(cosThetaB)+1.8) && trig_pass2016==1 && mll>20")
-    rc.Add("CRVVSF", isSF + " && nBJets==0 && MDR>30 && RPT<0.5 && gamInvRp1>0.8 && DPB_vSS<(0.85*abs(cosThetaB)+1.8) && trig_pass2016==1 && mll>20 && met>70")
+    crvdf_def = isDF + " && nBJets==0 && MDR>30 && RPT<0.5 && gamInvRp1>0.75 && DPB_vSS<(0.85*abs(cosThetaB)+1.8) && mll>20 && " + trigger 
+    rc.Add("CRVVDF", crvdf_def)
+    #rc.Add("CRVVDF", isDF + " && nBJets==0 && MDR>30 && RPT<0.5 && gamInvRp1>0.8 && DPB_vSS<(0.85*abs(cosThetaB)+1.8) && trig_pass2016==1 && mll>20")
+    crvsf_def = isSF + " && nBJets==0 && MDR>30 && RPT<0.5 && gamInvRp1>0.75 && DPB_vSS<(0.85*abs(cosThetaB)+1.8) && mll>20 && met>80 && " + trigger 
+    rc.Add("CRVVSF", crvsf_def)
+    #rc.Add("CRVVSF", isSF + " && nBJets==0 && MDR>30 && RPT<0.5 && gamInvRp1>0.8 && DPB_vSS<(0.85*abs(cosThetaB)+1.8) && trig_pass2016==1 && mll>20 && met>70")
     #rc.Add("VRVV", isDF + " && nBJets==0 && nSJets==0 && MDR>30 && RPT<0.5 && gamInvRp1>0.5 && DPB_vSS>(0.85*abs(cosThetaB)+1.8)")
-    rc.Add("VRVVDF", isDF + " && nBJets==0 && MDR>30 && MDR<80  && RPT<0.5 && gamInvRp1>0.8 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && trig_pass2016==1 && mll>20")
-    rc.Add("VRVVSF", isSF + " && nBJets==0 && MDR>30 && MDR<80  && RPT<0.5 && gamInvRp1>0.8 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && trig_pass2016==1 && mll>20 && met>70")
+    vrvdf_def = isDF + " && nBJets==0 && MDR>30 && MDR<80  && RPT<0.5 && gamInvRp1>0.75 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && mll>20 && " + trigger 
+    rc.Add("VRVVDF", vrvdf_def)
+    #rc.Add("VRVVDF", isDF + " && nBJets==0 && MDR>30 && MDR<80  && RPT<0.5 && gamInvRp1>0.8 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && trig_pass2016==1 && mll>20")
+    vrvsf_def = isSF + " && nBJets==0 && MDR>30 && MDR<80  && RPT<0.5 && gamInvRp1>0.75 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && mll>20 && met>80 && " + trigger 
+    rc.Add("VRVVSF", vrvsf_def)
+    #rc.Add("VRVVSF", isSF + " && nBJets==0 && MDR>30 && MDR<80  && RPT<0.5 && gamInvRp1>0.8 && DPB_vSS>(0.85*abs(cosThetaB)+1.8) && trig_pass2016==1 && mll>20 && met>70")
 
 
   #  ###################################

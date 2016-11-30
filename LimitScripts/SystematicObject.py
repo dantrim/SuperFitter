@@ -40,6 +40,9 @@ class SystematicObject :
             self.mcstat_ZZ      = Systematic("mcstat_ZZ",    "_CENTRAL", "_CENTRAL", "_CENTRAL", "tree", "shapeStat")
             self.mcstat_SIG     = Systematic("mcstat_SIG",   "_CENTRAL", "_CENTRAL", "_CENTRAL", "tree", "shapeStat")
             self.mcstat_DY      = Systematic("mcstat_DY",   "_CENTRAL", "_CENTRAL", "_CENTRAL", "tree", "shapeStat")
+            self.mcstat_TTV     = Systematic("mcstat_TTV", "_CENTRAL", "_CENTRAL", "_CENTRAL", "tree", "shapeStat")
+            self.mcstat_Higgs   = Systematic("mcstat_Higgs","_CENTRAL","_CENTRAL", "_CENTRAL", "tree", "shapeStat")
+            self.mcstat_FAKE    = Systematic("mcstat_FAKE", "_CENTRAL", "_CENTRAL", "_CENTRAL", "tree", "shapeStat")
 
 
         self.AR_PILEUP_MC = Systematic("AR_PILEUP_MC", configMgr.weights, ("eventweightNOPUPW", "1.", "pupw_up"), ("eventweightNOPUPW", "1.", "pupw_down"), "weight", "overallSys")
@@ -172,6 +175,12 @@ class SystematicObject :
         ## JES Paraemter set 1
         self.AR_JET_GroupedNP_1_MC = Systematic("AR_JET_GroupedNP_1_MC", "_CENTRAL", "_JET_GroupedNP_1_DN", "_JET_GroupedNP_1_UP", "tree", "overallSys")
         self.AR_JET_GroupedNP_1_CR = Systematic("AR_JET_GroupedNP_1_CR", "_CENTRAL", "_JET_GroupedNP_1_DN", "_JET_GroupedNP_1_UP", "tree", "overallNormSys")
+        ## JES Paraemter set 2
+        self.AR_JET_GroupedNP_2_MC = Systematic("AR_JET_GroupedNP_2_MC", "_CENTRAL", "_JET_GroupedNP_2_DN", "_JET_GroupedNP_2_UP", "tree", "overallSys")
+        self.AR_JET_GroupedNP_2_CR = Systematic("AR_JET_GroupedNP_2_CR", "_CENTRAL", "_JET_GroupedNP_2_DN", "_JET_GroupedNP_2_UP", "tree", "overallNormSys")
+        ## JES Paraemter set 3
+        self.AR_JET_GroupedNP_3_MC = Systematic("AR_JET_GroupedNP_3_MC", "_CENTRAL", "_JET_GroupedNP_3_DN", "_JET_GroupedNP_3_UP", "tree", "overallSys")
+        self.AR_JET_GroupedNP_3_CR = Systematic("AR_JET_GroupedNP_3_CR", "_CENTRAL", "_JET_GroupedNP_3_DN", "_JET_GroupedNP_3_UP", "tree", "overallNormSys")
 
         ###########################
         ## JET_JVTEff
@@ -269,6 +278,51 @@ class SystematicObject :
         self.SRwt_TTbar_THEORY        = getTheorySys("SRwt_TTbar_THEORY", "TTbar", "SRwt")
         self.SRwt_VVDF_THEORY         = getTheorySys("SRwt_VVDF_THEORY", "VVDF", "SRwt")
         self.SRwt_VVSF_THEORY         = getTheorySys("SRwt_VVSF_THEORY", "VVSF", "SRwt")
+
+
+        #######################################################
+        # Fake
+        #######################################################
+        def getFakeRelUncert(up_or_down, region) :
+            uncertainties = {}
+            uncertainties["SRw_EE"] = { "up" : 520,  "down" : 520  } 
+            uncertainties["SRw_MM"] = { "up" : 0.95, "down" : 0.95 }
+            uncertainties["SRw_SF"] = { "up" : 1.14, "down" : 1.14 }
+            uncertainties["SRw_DF"] = { "up" : 1.36, "down" : 1.36 }
+
+            # SRt_EE and SRt_MM are negative in all variations
+            uncertainties["SRt_DF"] = { "up" : 0.92, "down" : 0.92 }
+
+            uncertainties["CRTop"]  = { "up" : 9250, "down" : 9250 }
+            uncertainties["VRTop"]  = { "up" : 0.52, "down" : 0.52 }
+
+            # CRVVDF negative in all variations
+            uncertainties["CRVVSF"] = { "up" : 0.88, "down" : 0.88 } 
+
+            uncertainties["VRVVDF"] = { "up" : 0.20, "down" : 0.20 }
+            uncertainties["VRVVSF"] = { "up" : 0.23, "down" : 0.23 }
+
+            return uncertainties[region][up_or_down]
+
+        def getFakeSys(name_of_sys, region) :
+            return Systematic(name_of_sys, ["FakeWeight"], 1.0 + getFakeRelUncert("up", region), 1.0 - getFakeRelUncert("down", region), "user", "userOverallSys")
+
+
+        self.SRw_DF_FakeRelUnc      = getFakeSys("FakeRelUnc", "SRw_DF")
+        self.SRw_EE_FakeRelUnc      = getFakeSys("FakeRelUnc", "SRw_EE")
+        self.SRw_MM_FakeRelUnc      = getFakeSys("FakeRelUnc", "SRw_MM")
+        self.SRw_SF_FakeRelUnc      = getFakeSys("FakeRelUnc", "SRw_SF")
+
+        self.SRt_DF_FakeRelUnc      = getFakeSys("FakeRelUnc", "SRt_DF")
+
+        self.CRVVSF_FakeRelUnc      = getFakeSys("FakeRelUnc", "CRVVSF")
+
+        self.VRVVDF_FakeRelUnc      = getFakeSys("FakeRelUnc", "VRVVDF")
+        self.VRVVSF_FakeRelUnc      = getFakeSys("FakeRelUnc", "VRVVSF")
+
+        self.CRTop_FakeRelUnc       = getFakeSys("FakeRelUnc", "CRTop")
+        self.VRTop_FakeRelUnc       = getFakeSys("FakeRelUnc", "VRTop")
+
 
 
 
