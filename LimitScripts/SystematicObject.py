@@ -96,19 +96,19 @@ class SystematicObject :
         #######################################################
 
         ######################
-        ## MUONS_ID
-        self.AR_MUONS_ID_MC = Systematic("AR_MUONS_ID_MC", "_CENTRAL", "_MUONS_ID_DN", "_MUONS_ID_UP", "tree", "overallSys")
-        self.AR_MUONS_ID_CR = Systematic("AR_MUONS_ID_CR", "_CENTRAL", "_MUONS_ID_DN", "_MUONS_ID_UP", "tree", "overallNormSys")
+        ## MUON_ID
+        self.AR_MUON_ID_MC = Systematic("AR_MUON_ID_MC", "_CENTRAL", "_MUON_ID_DN", "_MUON_ID_UP", "tree", "overallSys")
+        self.AR_MUON_ID_CR = Systematic("AR_MUON_ID_CR", "_CENTRAL", "_MUON_ID_DN", "_MUON_ID_UP", "tree", "overallNormSys")
 
         ######################
-        ## MUONS_MS
-        self.AR_MUONS_MS_MC = Systematic("AR_MUONS_MS_MC", "_CENTRAL", "_MUONS_MS_DN", "_MUONS_MS_UP", "tree", "overallSys")
-        self.AR_MUONS_MS_CR = Systematic("AR_MUONS_MS_CR", "_CENTRAL", "_MUONS_MS_DN", "_MUONS_MS_UP", "tree", "overallNormSys")
+        ## MUON_MS
+        self.AR_MUON_MS_MC = Systematic("AR_MUON_MS_MC", "_CENTRAL", "_MUON_MS_DN", "_MUON_MS_UP", "tree", "overallSys")
+        self.AR_MUON_MS_CR = Systematic("AR_MUON_MS_CR", "_CENTRAL", "_MUON_MS_DN", "_MUON_MS_UP", "tree", "overallNormSys")
 
         #####################
-        ## MUONS_SCALE
-        self.AR_MUONS_SCALE_MC = Systematic("AR_MUONS_SCALE_MC", "_CENTRAL", "_MUONS_SCALE_DN", "_MUONS_SCALE_UP", "tree", "overallSys")
-        self.AR_MUONS_SCALE_CR = Systematic("AR_MUONS_SCALE_CR", "_CENTRAL", "_MUONS_SCALE_DN", "_MUONS_SCALE_UP", "tree", "overallNormSys")
+        ## MUON_SCALE
+        self.AR_MUON_SCALE_MC = Systematic("AR_MUON_SCALE_MC", "_CENTRAL", "_MUON_SCALE_DN", "_MUON_SCALE_UP", "tree", "overallSys")
+        self.AR_MUON_SCALE_CR = Systematic("AR_MUON_SCALE_CR", "_CENTRAL", "_MUON_SCALE_DN", "_MUON_SCALE_UP", "tree", "overallNormSys")
 
         ######################
         ## MUON_EFF_STAT

@@ -299,8 +299,8 @@ runOptions.setTheoryBand(doTheoryBand)
 #########################################
 ## configure input and output lumi
 userPrint("Setting the luminosity.")
-lumi_input  = 3.21 
-lumi_output = 35.02 
+lumi_input  = 1.0 # the MC ntuples are normalized to 1.00/fb
+lumi_output = 36.00 
 lumi_units  = "fb-1"
 #userPrint(" --> input  : %s"%str(lumi_input))
 #userPrint(" --> output : %s"%str(lumi_output))
@@ -315,16 +315,18 @@ runOptions.setLumiUnits(lumi_units)
 #########################################
 ## load the samples
 userPrint("Setting up the samples.")
-#hft_dir = "/data/uclhc/uci/user/dantrim/n0222val/SuperFitter/"
-hft_dir = "/data/uclhc/uci/user/dantrim/SuperFitter/"
+#hft_dir = "/data/uclhc/uci/user/dantrim/SuperFitter/"
+hft_dir = "/data/uclhc/uci/user/dantrim/n0231val/SuperFitter/hft_trees/"
 
 ## data, ttbar, and ww file
-data_file = hft_dir + "HFT_DataYEP_13TeV_Nov22.root"
-mc_file   = hft_dir + "HFT_BG_13TeV_Nov22.root"
-vv_df_file = hft_dir + "HFT_VVDF_13TeV_Nov22.root"
-vv_sf_file = hft_dir + "HFT_VVSF_13TeV_Nov22.root" 
-drellyan_file = hft_dir + "HFT_BG_13TeV_DrellYan.root"
-fake_file = hft_dir + "HFT_Fakes_13TeV_Jul27.root" # scaling up the fakes from ICHEP 
+data_file       = hft_dir + "HFT_Data_13TeV_19Jan17.root"
+mc_file         = hft_dir + "HFT_BG_13TeV_19Jan17.root"
+top_file        = hft_dir + "HFT_Top_13TeV_19Jan17.root"
+ttv_higgs_file  = hft_dir + "HFT_TTV_Higgs_13TeV_19Jan17.root"
+vv_df_file      = hft_dir + "HFT_VVDF_13TeV_19Jan17.root"
+vv_sf_file      = hft_dir + "HFT_VVSF_13TeV_19Jan17.root" 
+zjets_file      = hft_dir + "HFT_Zjets_13TeV_19Jan17.root"
+fake_file       = hft_dir + "HFT_Fakes_13TeV_Jul27.root" # scaling up the fakes from ICHEP 
 signal_file = ""
 if gridname == "bWN" : signal_file = hft_dir + "HFT_bWN_13TeV_Nov22.root"
 else : 
@@ -334,52 +336,51 @@ else :
 
 ## set the samples
 #ttbar skip
-ttbarSample = Sample("TTbar",   ROOT.TColor.GetColor("#FC0D1B"))
-vvDFSample    = Sample("VVDF",      ROOT.TColor.GetColor("#41C1FC"))
-vvSFSample    = Sample("VVSF",   ROOT.TColor.GetColor("#41C1FC"))
-#wwSample    = Sample("WW",      ROOT.TColor.GetColor("#41C1FC"))
-stSample    = Sample("ST",      ROOT.TColor.GetColor("#DE080C")) 
-dysample = Sample("DrellYan", ROOT.kYellow)
+ttbarSample     = Sample("TTbar",   ROOT.TColor.GetColor("#FC0D1B"))
+stSample        = Sample("ST",      ROOT.TColor.GetColor("#DE080C")) 
 ttvSample       = Sample("TTV",      ROOT.kCyan-7)# ROOT.kRed)
-fakeSample = Sample("Fakes", ROOT.kOrange+7)
-higgsSample = Sample("Higgs", ROOT.TColor.GetColor("#ddc29a"))
-print 45*"-"
-print "REMOVING W+JETS SAMPLE"
-print "REMOVING W+JETS SAMPLE"
-print "REMOVING W+JETS SAMPLE"
-print "REMOVING W+JETS SAMPLE"
-print "REMOVING W+JETS SAMPLE"
-print 45*"-"
-wjetsSample = Sample("Wjets",   ROOT.TColor.GetColor("#5E9AD6")) 
-zjetsSample = Sample("Zjets",   ROOT.TColor.GetColor("#82DE68"))
+vvDFSample      = Sample("VVDF",      ROOT.TColor.GetColor("#41C1FC"))
+vvSFSample      = Sample("VVSF",   ROOT.TColor.GetColor("#41C1FC"))
+fakeSample      = Sample("Fakes", ROOT.kOrange+7)
+higgsSample     = Sample("Higgs", ROOT.TColor.GetColor("#ddc29a"))
+zjetsSample     = Sample("Zjets",   ROOT.TColor.GetColor("#82DE68"))
+#wwSample       = Sample("WW",      ROOT.TColor.GetColor("#41C1FC"))
+#dysample        = Sample("DrellYan", ROOT.kYellow)
+#wjetsSample = Sample("Wjets",   ROOT.TColor.GetColor("#5E9AD6")) 
 #wzSample    = Sample("WZ",      ROOT.TColor.GetColor("#F9F549")) 
 #zzSample    = Sample("ZZ",      ROOT.TColor.GetColor("#FFEF53")) 
 dataSample  = Sample("Data_CENTRAL", kBlack)
 
 ## attach samples to their files
 #ttbar skip
-all_samples = [ ttbarSample, vvDFSample, vvSFSample, stSample, zjetsSample, fakeSample, ttvSample, higgsSample, dataSample ] #wjets covered by fakes
-#all_samples = [ ttbarSample, vvDFSample, vvSFSample, stSample, wjetsSample, zjetsSample, fakeSample, ttvSample, dataSample ]
-#all_samples = [ ttbarSample, vvSample, stSample, wjetsSample, zjetsSample, dataSample ]
-#ttbar skip
-#samples     = [ vvSample, stSample, wjetsSample, zjetsSample, dataSample ]
-#samples_noVV     = [ ttbarSample, stSample, wjetsSample, zjetsSample ]#, dataSample ]
-samples_mc_noVV = [ttbarSample, stSample, zjetsSample, ttvSample, higgsSample]
+all_samples = [ ttbarSample, stSample, ttvSample, vvDFSample, vvSFSample, fakeSample, higgsSample, zjetsSample, dataSample ]
+#samples_mc_noVV = [ttbarSample, stSample, zjetsSample, ttvSample, higgsSample]
 #samples_mc_noVV = [ttbarSample, stSample, wjetsSample, zjetsSample, ttvSample]
 samples_data = [ dataSample ]
 #samples     = [ ttbarSample, vvSample, stSample, wjetsSample, zjetsSample, dataSample ]
-for s in samples_mc_noVV :
-    s.setFileList( [mc_file] )
-    userPrint(" --> Sample : %s at %s"%(s.name, mc_file))
+#for s in samples_mc_noVV :
+#    s.setFileList( [mc_file] )
+#    userPrint(" --> Sample : %s at %s"%(s.name, mc_file))
+
+ttbarSample.setFileList([top_file])
+stSample.setFileList([top_file])
+ttvSample.setFileList([ttv_higgs_file])
+higgsSample.setFileList([ttv_higgs_file])
 vvDFSample.setFileList([vv_df_file])
-userPrint(" --> Sample : %s at %s"%(vvDFSample.name, vv_df_file))
 vvSFSample.setFileList([vv_sf_file])
-userPrint(" --> Sample : %s at %s"%(vvSFSample.name, vv_sf_file))
 fakeSample.setFileList([fake_file])
+zjetsSample.setFileList([zjets_file])
+userPrint(" --> Sample : %s at %s"%(ttbarSample.name, top_file))
+userPrint(" --> Sample : %s at %s"%(stSample.name, top_file))
+userPrint(" --> Sample : %s at %s"%(ttvSample.name, ttv_higgs_file))
+userPrint(" --> Sample : %s at %s"%(higgsSample.name, ttv_higgs_file))
+userPrint(" --> Sample : %s at %s"%(vvDFSample.name, vv_df_file))
+userPrint(" --> Sample : %s at %s"%(vvSFSample.name, vv_sf_file))
 userPrint(" --> Sample : %s at %s"%(fakeSample.name, fake_file))
+userPrint(" --> Sample : %s at %s"%(zjetsSample.name, zjets_file))
+
 dataSample.setFileList([data_file])
-#dysample.setFileList([drellyan_file])
-#userPrint(" --> Sample : %s at %s"%(dysample.name, drellyan_file))
+userPrint(" --> Sample : %s at %s"%(dataSample.name, data_file))
 
 
 ##########################################
@@ -423,11 +424,11 @@ if runOptions.doBackground() : configMgr.myFitType == configMgr.FitType.Backgrou
 
 configMgr.blindSR = runOptions.doBlindSR()
 print 60*"-"
-print "HARDCODING: NOT BLINDING SIGNAL REGIONS"
-print "HARDCODING: NOT BLINDING SIGNAL REGIONS"
-print "HARDCODING: NOT BLINDING SIGNAL REGIONS"
-print "HARDCODING: NOT BLINDING SIGNAL REGIONS"
-configMgr.blindSR = False
+print "HARDCODING: BLINDING SIGNAL REGIONS"
+print "HARDCODING: BLINDING SIGNAL REGIONS"
+print "HARDCODING: BLINDING SIGNAL REGIONS"
+print "HARDCODING: BLINDING SIGNAL REGIONS"
+configMgr.blindSR = True
 configMgr.blindCR = runOptions.doBlindCR()
 configMgr.blindVR = runOptions.doBlindVR()
 print 60*"-"
@@ -505,19 +506,19 @@ def addSys(sample, doSimFit, sysObject, is_signal=False) :
         ## weight systematics
         #############################################################
 
-        ## pileup
-        #if not is_signal :
-        #    sample.addSystematic(sysObject.AR_PILEUP_CR)
+        # pileup
+        if not is_signal :
+            sample.addSystematic(sysObject.AR_PILEUP_CR)
 
-        ## e-gamma
-        #if not is_signal :
-        #    sample.addSystematic(sysObject.AR_EL_EFF_ID_CR)
-        #    sample.addSystematic(sysObject.AR_EL_EFF_Iso_CR)
-        #    sample.addSystematic(sysObject.AR_EL_EFF_Reco_CR)
-        #elif is_signal :
-        #    sample.addSystematic(sysObject.AR_EL_EFF_ID_SIG_CR)
-        #    sample.addSystematic(sysObject.AR_EL_EFF_Iso_SIG_CR)
-        #    sample.addSystematic(sysObject.AR_EL_EFF_Reco_SIG_CR)
+        # e-gamma
+        if not is_signal :
+            sample.addSystematic(sysObject.AR_EL_EFF_ID_CR)
+            #sample.addSystematic(sysObject.AR_EL_EFF_Iso_CR)
+            #sample.addSystematic(sysObject.AR_EL_EFF_Reco_CR)
+        elif is_signal :
+            sample.addSystematic(sysObject.AR_EL_EFF_ID_SIG_CR)
+            #sample.addSystematic(sysObject.AR_EL_EFF_Iso_SIG_CR)
+            #sample.addSystematic(sysObject.AR_EL_EFF_Reco_SIG_CR)
 
         ## muons
         #if not is_signal :
@@ -535,23 +536,23 @@ def addSys(sample, doSimFit, sysObject, is_signal=False) :
         #    sample.addSystematic(sysObject.AR_MUON_ISO_STAT_SIG_CR)
         #    sample.addSystematic(sysObject.AR_MUON_ISO_SYS_SIG_CR)
 
-        ## jets
-        #if not is_signal :
-        #    sample.addSystematic(sysObject.AR_JET_JVTEff_CR)
-        #elif is_signal :
-        #    sample.addSystematic(sysObject.AR_JET_JVTEff_SIG_CR)
+        # jets
+        if not is_signal :
+            sample.addSystematic(sysObject.AR_JET_JVTEff_CR)
+        elif is_signal :
+            sample.addSystematic(sysObject.AR_JET_JVTEff_SIG_CR)
 
         ## flavor tagging
         if not is_signal :
             sample.addSystematic(sysObject.AR_FT_EFF_B_CR)
         #    sample.addSystematic(sysObject.AR_FT_EFF_C_CR)
-        #    sample.addSystematic(sysObject.AR_FT_EFF_Light_CR)
+            sample.addSystematic(sysObject.AR_FT_EFF_Light_CR)
         #    sample.addSystematic(sysObject.AR_FT_EFF_extrapolation_CR)
         #    sample.addSystematic(sysObject.AR_FT_EFF_extrapolation_charm_CR)
         elif is_signal :
             sample.addSystematic(sysObject.AR_FT_EFF_B_SIG_CR)
         #    sample.addSystematic(sysObject.AR_FT_EFF_C_SIG_CR)
-        #    sample.addSystematic(sysObject.AR_FT_EFF_Light_SIG_CR)
+            sample.addSystematic(sysObject.AR_FT_EFF_Light_SIG_CR)
         #    sample.addSystematic(sysObject.AR_FT_EFF_extrapolation_SIG_CR)
         #    sample.addSystematic(sysObject.AR_FT_EFF_extrapolation_charm_SIG_CR)
 
@@ -563,9 +564,9 @@ def addSys(sample, doSimFit, sysObject, is_signal=False) :
         sample.addSystematic(sysObject.AR_EG_RESOLUTION_ALL_CR)
         #sample.addSystematic(sysObject.AR_EG_SCALE_ALL_CR)
         ## muons
-        #sample.addSystematic(sysObject.AR_MUONS_ID_CR)
-        sample.addSystematic(sysObject.AR_MUONS_MS_CR)
-        sample.addSystematic(sysObject.AR_MUONS_SCALE_CR)
+        #sample.addSystematic(sysObject.AR_MUON_ID_CR)
+        sample.addSystematic(sysObject.AR_MUON_MS_CR)
+        sample.addSystematic(sysObject.AR_MUON_SCALE_CR)
         ## jets
         sample.addSystematic(sysObject.AR_JER_CR)
         sample.addSystematic(sysObject.AR_JET_GroupedNP_1_CR)
@@ -581,19 +582,19 @@ def addSys(sample, doSimFit, sysObject, is_signal=False) :
         ## weight systematics
         #############################################################
 
-        ## pileup
-        #if not is_signal :
-        #    sample.addSystematic(sysObject.AR_PILEUP_MC)
+        # pileup
+        if not is_signal :
+            sample.addSystematic(sysObject.AR_PILEUP_MC)
 
-        ## e-gamma
-        #if not is_signal :
-        #    sample.addSystematic(sysObject.AR_EL_EFF_ID_MC)
-        #    sample.addSystematic(sysObject.AR_EL_EFF_Iso_MC)
-        #    sample.addSystematic(sysObject.AR_EL_EFF_Reco_MC)
-        #elif is_signal :
-        #    sample.addSystematic(sysObject.AR_EL_EFF_ID_SIG_MC)
-        #    sample.addSystematic(sysObject.AR_EL_EFF_Iso_SIG_MC)
-        #    sample.addSystematic(sysObject.AR_EL_EFF_Reco_SIG_MC)
+        # e-gamma
+        if not is_signal :
+            sample.addSystematic(sysObject.AR_EL_EFF_ID_MC)
+           # sample.addSystematic(sysObject.AR_EL_EFF_Iso_MC)
+           # sample.addSystematic(sysObject.AR_EL_EFF_Reco_MC)
+        elif is_signal :
+            sample.addSystematic(sysObject.AR_EL_EFF_ID_SIG_MC)
+           # sample.addSystematic(sysObject.AR_EL_EFF_Iso_SIG_MC)
+           # sample.addSystematic(sysObject.AR_EL_EFF_Reco_SIG_MC)
 
         ## muons
         #if not is_signal :
@@ -611,23 +612,23 @@ def addSys(sample, doSimFit, sysObject, is_signal=False) :
         #    sample.addSystematic(sysObject.AR_MUON_ISO_STAT_SIG_MC)
         #    sample.addSystematic(sysObject.AR_MUON_ISO_SYS_SIG_MC)
 
-        ## jets
-        #if not is_signal :
-        #    sample.addSystematic(sysObject.AR_JET_JVTEff_MC)
-        #elif is_signal :
-        #    sample.addSystematic(sysObject.AR_JET_JVTEff_SIG_MC)
+        # jets
+        if not is_signal :
+            sample.addSystematic(sysObject.AR_JET_JVTEff_MC)
+        elif is_signal :
+            sample.addSystematic(sysObject.AR_JET_JVTEff_SIG_MC)
 
         ## flavor tagging
         if not is_signal :
             sample.addSystematic(sysObject.AR_FT_EFF_B_MC)
         #    sample.addSystematic(sysObject.AR_FT_EFF_C_MC)
-        #    sample.addSystematic(sysObject.AR_FT_EFF_Light_MC)
+            sample.addSystematic(sysObject.AR_FT_EFF_Light_MC)
         #    sample.addSystematic(sysObject.AR_FT_EFF_extrapolation_MC)
         #    sample.addSystematic(sysObject.AR_FT_EFF_extrapolation_charm_MC)
         elif is_signal :
             sample.addSystematic(sysObject.AR_FT_EFF_B_SIG_MC)
         #    sample.addSystematic(sysObject.AR_FT_EFF_C_SIG_MC)
-        #    sample.addSystematic(sysObject.AR_FT_EFF_Light_SIG_MC)
+            sample.addSystematic(sysObject.AR_FT_EFF_Light_SIG_MC)
         #    sample.addSystematic(sysObject.AR_FT_EFF_extrapolation_SIG_MC)
         #    sample.addSystematic(sysObject.AR_FT_EFF_extrapolation_charm_SIG_MC)
 
@@ -639,9 +640,9 @@ def addSys(sample, doSimFit, sysObject, is_signal=False) :
         sample.addSystematic(sysObject.AR_EG_RESOLUTION_ALL_MC)
         #sample.addSystematic(sysObject.AR_EG_SCALE_ALL_MC)
         ## muons
-        #sample.addSystematic(sysObject.AR_MUONS_ID_MC)
-        sample.addSystematic(sysObject.AR_MUONS_MS_MC)
-        sample.addSystematic(sysObject.AR_MUONS_SCALE_MC)
+        #sample.addSystematic(sysObject.AR_MUON_ID_MC)
+        sample.addSystematic(sysObject.AR_MUON_MS_MC)
+        sample.addSystematic(sysObject.AR_MUON_SCALE_MC)
         ## jets
         sample.addSystematic(sysObject.AR_JER_MC)
         sample.addSystematic(sysObject.AR_JET_GroupedNP_1_MC)
@@ -849,8 +850,8 @@ for sample in all_samples :
         sample.setNormByTheory()
         # the sample will be scaled by the lumi input/output ratio
         # and we have run the fakes over 12.2/fb --
-        # scale back to 3.2/fb from 12.2 by dividing by 3.81
-        sample.weights = ["(FakeWeight / 3.81)"]
+        # scale back to 1.0/fb from 12.2 by dividing by 12.2
+        sample.weights = ["(FakeWeight / 12.2)"]
         if runOptions.doSplitMCsys() :
             sample.addSystematic( sysObj.mcstat_FAKE )
 

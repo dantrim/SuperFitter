@@ -89,16 +89,16 @@ syst.append('CENTRAL')
 # egamma
 syst.append('EG_RESOLUTION_ALL_UP')
 syst.append('EG_RESOLUTION_ALL_DN')
-#syst.append('EG_SCALE_ALL_UP')
-#syst.append('EG_SCALE_ALL_DN')
+syst.append('EG_SCALE_ALL_UP')
+syst.append('EG_SCALE_ALL_DN')
 #
 ## muons
-#syst.append('MUONS_ID_DN')
-#syst.append('MUONS_ID_UP')
-syst.append('MUONS_MS_DN')
-syst.append('MUONS_MS_UP')
-syst.append('MUONS_SCALE_DN')
-syst.append('MUONS_SCALE_UP')
+syst.append('MUON_ID_DN')
+syst.append('MUON_ID_UP')
+syst.append('MUON_MS_DN')
+syst.append('MUON_MS_UP')
+syst.append('MUON_SCALE_DN')
+syst.append('MUON_SCALE_UP')
 #
 ## jet
 syst.append('JER')
@@ -118,19 +118,22 @@ syst.append('JET_GroupedNP_3_UP')
 ###########################
 ## backgrounds
 backgrounds = []
-filelist_dir      = "/data/uclhc/uci/user/dantrim/n0229val/filelists/"
+filelist_dir      = "/data/uclhc/uci/user/dantrim/n0231val/filelists/"
 #mc_sample_dir = "/data/uclhc/uci/user/dantrim/ntuples/n0228/a_sep21/diboson_SF/Raw/"
 #mc_sample_dir  = "/data/uclhc/uci/user/dantrim/ntuples/n0226/jul25/mc/diboson_sf/Raw/"
-data_sample_dir   = "/data/uclhc/uci/user/dantrim/ntuples/n0228/a_sep21/all_data_Nov15/"
+data_sample_dir   = "/data/uclhc/uci/user/dantrim/ntuples/n0231/b_jan18/data/Raw/"
 fake_sample_dir   = "/data/uclhc/uci/user/dantrim/SuperFitter/fake_files/"
 
-mc_sample_dir = "/data/uclhc/uci/user/dantrim/ntuples/n0229/a_Nov29/mc/diboson_SF/Raw/"
+#mc_sample_dir = "/data/uclhc/uci/user/dantrim/ntuples/n0229/a_Nov29/mc/diboson_SF/Raw/"
+#mc_sample_dir = "/data/uclhc/uci/user/dantrim/ntuples/n0231/b_jan18/mc/Raw/"
+#mc_sample_dir = "/data/uclhc/uci/user/dantrim/ntuples/n0231/b_jan18/mc/diboson_DF/Raw/"
+mc_sample_dir = "/data/uclhc/uci/user/dantrim/ntuples/n0231/b_jan18/mc/zjets_dy/Raw/"
 
 # data
-#bkg_data    = Background("Data", filelist_dir + "data_toRunTMP2/")
+#bkg_data    = Background("Data", filelist_dir + "dataToRun/")
 #backgrounds.append(bkg_data)
 
-## ttbar
+# ttbar
 #bkg_ttbar   = Background("TTbar", filelist_dir + "ttbar/")
 #backgrounds.append(bkg_ttbar)
 #
@@ -142,9 +145,9 @@ mc_sample_dir = "/data/uclhc/uci/user/dantrim/ntuples/n0229/a_Nov29/mc/diboson_S
 #bkg_wjets   = Background("Wjets", filelist_dir + "wjets_sherpa22/")
 #backgrounds.append(bkg_wjets)
 #
-## zjets
-#bkg_zjets   = Background("Zjets", filelist_dir + "zjets_sherpa22/")
-#backgrounds.append(bkg_zjets)
+# zjets
+bkg_zjets   = Background("Zjets", filelist_dir + "zjets_and_DY/")
+backgrounds.append(bkg_zjets)
 #
 ### fakes
 ##bkg_fakes   = Background("Fakes", "/data/uclhc/uci/user/dantrim/ntuples/n0224/fakes_jun13/") 
@@ -155,13 +158,17 @@ mc_sample_dir = "/data/uclhc/uci/user/dantrim/ntuples/n0229/a_Nov29/mc/diboson_S
 ##bkg_dy = Background("DrellYan", filelist_dir + "drellyan_sherpa/")
 ##backgrounds.append(bkg_dy)
 #
-# diboson
-bkg_diboson = Background("VVSF", filelist_dir + "diboson_sherpa_lvlv/")
-backgrounds.append(bkg_diboson)
+## diboson
+#bkg_diboson = Background("VVDF", filelist_dir + "diboson_sherpa_lvlv/")
+#backgrounds.append(bkg_diboson)
 #
 ## ttV
 #bkg_ttv = Background("TTV", filelist_dir + "ttV/")
 #backgrounds.append(bkg_ttv)
+#
+## higgs
+#bkg_higgs = Background("Higgs", filelist_dir + "higgs/")
+#backgrounds.append(bkg_higgs)
 
 ############################
 ## signals
@@ -175,7 +182,8 @@ signals.append(sig_bWN)
 ###################################
 ## setup the output file name and location
 output_dir  = "./" 
-output_name = "HFT_VVSF_13TeV_Nov30.root"
+#output_name = "HFT_Data_13TeV_19Jan17.root"
+output_name = "HFT_Zjets_13TeV_19Jan17.root"
 output_name_sig = "HFT_bWN_13TeV_Nov22.root"
 
 
